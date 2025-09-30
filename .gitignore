@@ -1,0 +1,22 @@
+# Compiled Java files
+*.class
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# Node modules
+node_modules/
+npm-debug.log
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# Build files
+build/
+dist/
