@@ -5,11 +5,12 @@ import br.com.danferri.luthierflow.repository.PecaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
-@Service // Diz ao Spring que esta classe contém a lógica de negócio
+@Service
 public class PecaService {
 
-    @Autowired // Injeção de Dependência: o Spring nos dá uma instância do PecaRepository
+    @Autowired
     private PecaRepository pecaRepository;
 
     public List<Peca> listarTodas() {
@@ -17,7 +18,31 @@ public class PecaService {
     }
 
     public Peca salvar(Peca peca) {
-        // Aqui poderíamos adicionar regras de negócio, como validar se a peça já existe
+        Optional<Peca> pecaExistente = pecaRepository.findByNomePecaAndFabricante(peca.getNomePeca(), peca.getFabricante());
+
+        if (pecaExistente.isPresent()) {
+            throw new IllegalArgumentException("Peça com mesmo nome e fabricante já cadastrada");
+        }
         return pecaRepository.save(peca);
+    }
+
+    public Optional<Peca> atualizar(Long id, Peca pecaAtualizada) {
+        return pecaRepository.findById(id)
+                .map(pecaExistente -> {
+                    pecaExistente.setNomePeca(pecaAtualizada.getNomePeca());
+                    pecaExistente.setFabricante(pecaAtualizada.getFabricante());
+                    pecaExistente.setQtdEstoque(pecaAtualizada.getQtdEstoque());
+                    pecaExistente.setPrecoVenda(pecaAtualizada.getPrecoVenda());
+                    return pecaRepository.save(pecaExistente);
+                });
+    }
+
+
+
+    public void deletar(Long id) {
+        if (!pecaRepository.existsById(id)) {
+            return;
+        }
+        pecaRepository.deleteById(id);
     }
 }

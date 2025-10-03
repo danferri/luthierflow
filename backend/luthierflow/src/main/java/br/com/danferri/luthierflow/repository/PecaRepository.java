@@ -4,8 +4,9 @@ import br.com.danferri.luthierflow.domain.Peca;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository // Opcional, mas boa prática para indicar que é um componente de persistência
+import java.util.Optional;
+
+@Repository
 public interface PecaRepository extends JpaRepository<Peca, Long> {
-    // A mágica do Spring Data JPA: não precisamos escrever nenhum código aqui!
-    // Métodos como save(), findById(), findAll(), deleteById() já estão disponíveis.
+    Optional<Peca> findByNomePecaAndFabricante(String nomePeca, String fabricante);
 }
