@@ -37,8 +37,6 @@ public class PecaService {
                 });
     }
 
-
-
     public void deletar(Long id) {
         if (!pecaRepository.existsById(id)) {
             return;
