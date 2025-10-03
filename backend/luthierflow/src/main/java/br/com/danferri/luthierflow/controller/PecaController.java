@@ -14,14 +14,23 @@ public class PecaController {
     @Autowired
     private PecaService pecaService;
 
-    @GetMapping
-    public List<Peca> listarTodasAsPecas() {
-        return pecaService.listarTodas();
+    @PostMapping
+    public ResponseEntity<Peca> adicionarPeca(@RequestBody Peca peca) {
+        Peca novaPeca = pecaService.salvar(peca);
+        return ResponseEntity.ok(novaPeca);
     }
 
-    @PostMapping
-    public Peca adicionarPeca(@RequestBody Peca peca) {
-        return pecaService.salvar(peca);
+    @GetMapping
+    public ResponseEntity<List<Peca>> listarTodasAsPecas() {
+        List<Peca> pecas = pecaService.listarTodas();
+        return ResponseEntity.ok(pecas);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Peca> buscarPecaPorId(@PathVariable Long id) {
+        return pecaService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
@@ -32,8 +41,10 @@ public class PecaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removerPeca(@PathVariable Long id) {
-        pecaService.deletar(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletarPeca(@PathVariable Long id) {
+        if (pecaService.deletar(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

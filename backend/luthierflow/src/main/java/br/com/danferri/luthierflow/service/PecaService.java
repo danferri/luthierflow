@@ -17,6 +17,10 @@ public class PecaService {
         return pecaRepository.findAll();
     }
 
+    public Optional<Peca> buscarPorId(Long id) {
+        return pecaRepository.findById(id);
+    }
+
     public Peca salvar(Peca peca) {
         Optional<Peca> pecaExistente = pecaRepository.findByNomePecaAndFabricante(peca.getNomePeca(), peca.getFabricante());
 
@@ -37,10 +41,11 @@ public class PecaService {
                 });
     }
 
-    public void deletar(Long id) {
-        if (!pecaRepository.existsById(id)) {
-            return;
+    public boolean deletar(Long id) {
+        if (pecaRepository.existsById(id)) {
+            pecaRepository.deleteById(id);
+            return true;
         }
-        pecaRepository.deleteById(id);
+        return false;
     }
 }
