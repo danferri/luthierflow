@@ -1,12 +1,14 @@
 package br.com.danferri.luthierflow.controller;
 
 import br.com.danferri.luthierflow.domain.OrdemDeServico;
+import br.com.danferri.luthierflow.dto.OrdemServicoDTO;
 import br.com.danferri.luthierflow.service.OrdemServicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/ordens-servico")
@@ -16,33 +18,37 @@ public class OrdemServicoController {
     private OrdemServicoService ordemServicoService;
 
     @GetMapping
-    public ResponseEntity<List<OrdemDeServico>> listarTodasAsOrdens() {
-        return ResponseEntity.ok(ordemServicoService.listarTodas());
+    public ResponseEntity<List<OrdemServicoDTO>> listarTodasAsOrdens() {
+        List<OrdemServicoDTO> listaDto = ordemServicoService.listarTodas()
+                .stream()
+                .map(OrdemServicoDTO::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(listaDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrdemDeServico> buscarOrdemPorId(@PathVariable Long id) {
+    public ResponseEntity<OrdemServicoDTO> buscarOrdemPorId(@PathVariable Long id) {
         return ordemServicoService.buscarPorId(id)
-                .map(ResponseEntity::ok)
+                .map(os -> ResponseEntity.ok(new OrdemServicoDTO(os)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<OrdemDeServico> adicionarOrdem(@RequestBody OrdemDeServico os,
-                                                         @RequestParam Long clienteId,
-                                                         @RequestParam(required = false) Long instrumentoId) {
+    public ResponseEntity<OrdemServicoDTO> adicionarOrdem(@RequestBody OrdemDeServico os,
+                                                          @RequestParam Long clienteId,
+                                                          @RequestParam(required = false) Long instrumentoId) {
         try {
             OrdemDeServico novaOs = ordemServicoService.salvar(os, clienteId, instrumentoId);
-            return ResponseEntity.ok(novaOs);
+            return ResponseEntity.ok(new OrdemServicoDTO(novaOs));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrdemDeServico> atualizarOrdem(@PathVariable Long id, @RequestBody OrdemDeServico os) {
+    public ResponseEntity<OrdemServicoDTO> atualizarOrdem(@PathVariable Long id, @RequestBody OrdemDeServico os) {
         return ordemServicoService.atualizar(id, os)
-                .map(ResponseEntity::ok)
+                .map(osAtualizada -> ResponseEntity.ok(new OrdemServicoDTO(osAtualizada)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
