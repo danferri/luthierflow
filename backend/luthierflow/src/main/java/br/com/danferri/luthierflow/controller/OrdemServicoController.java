@@ -1,6 +1,7 @@
 package br.com.danferri.luthierflow.controller;
 
 import br.com.danferri.luthierflow.domain.OrdemDeServico;
+import br.com.danferri.luthierflow.dto.AdicionarPecaRequestDTO;
 import br.com.danferri.luthierflow.dto.OrdemServicoDTO;
 import br.com.danferri.luthierflow.service.OrdemServicoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,18 @@ public class OrdemServicoController {
         }
     }
 
+    @PostMapping("/{osId}/pecas")
+    public ResponseEntity<OrdemServicoDTO> adicionarPecaNaOs(@PathVariable Long osId, @RequestBody AdicionarPecaRequestDTO request) {
+        try {
+            OrdemDeServico osAtualizada = ordemServicoService.adicionarPeca(osId, request.getPecaId(), request.getQuantidade());
+            return ResponseEntity.ok(new OrdemServicoDTO(osAtualizada));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<OrdemServicoDTO> atualizarOrdem(@PathVariable Long id, @RequestBody OrdemDeServico os) {
         return ordemServicoService.atualizar(id, os)
@@ -58,5 +71,15 @@ public class OrdemServicoController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{osId}/pecas/{pecaId}")
+    public ResponseEntity<OrdemServicoDTO> removerPecaDaOs(@PathVariable Long osId, @PathVariable Long pecaId) {
+        try {
+            OrdemDeServico osAtualizada = ordemServicoService.removerPeca(osId, pecaId);
+            return ResponseEntity.ok(new OrdemServicoDTO(osAtualizada));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

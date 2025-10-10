@@ -1,12 +1,13 @@
 package br.com.danferri.luthierflow.service;
 
-import br.com.danferri.luthierflow.domain.Cliente;
-import br.com.danferri.luthierflow.domain.Instrumento;
-import br.com.danferri.luthierflow.domain.OrdemDeServico;
+import br.com.danferri.luthierflow.domain.*;
 import br.com.danferri.luthierflow.domain.enums.StatusOS;
 import br.com.danferri.luthierflow.repository.ClienteRepository;
 import br.com.danferri.luthierflow.repository.InstrumentoRepository;
 import br.com.danferri.luthierflow.repository.OrdemServicoRepository;
+
+import br.com.danferri.luthierflow.repository.PecaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,9 @@ public class OrdemServicoService {
 
     @Autowired
     private InstrumentoRepository instrumentoRepository;
+
+    @Autowired
+    private PecaRepository pecaRepository;
 
     public List<OrdemDeServico> listarTodas() {
         return ordemServicoRepository.findAll();
@@ -75,6 +79,57 @@ public class OrdemServicoService {
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    public OrdemDeServico adicionarPeca(Long osId, Long pecaId, int quantidade) {
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+        }
+
+        OrdemDeServico os = ordemServicoRepository.findById(osId)
+                .orElseThrow(() -> new IllegalArgumentException("Ordem de Serviço não encontrada."));
+
+        Peca peca = pecaRepository.findById(pecaId)
+                .orElseThrow(() -> new IllegalArgumentException("Peça não encontrada."));
+
+        if (peca.getQtdEstoque() < quantidade) {
+            throw new IllegalStateException("Estoque insuficiente para a peça: " + peca.getNomePeca());
+        }
+
+        ItemServico item = os.getItens().stream()
+                .filter(i -> i.getPeca().getId().equals(pecaId))
+                .findFirst()
+                .orElse(new ItemServico(os, peca, 0));
+
+        item.setQtdUsada(item.getQtdUsada() + quantidade);
+        os.getItens().add(item);
+
+        peca.setQtdEstoque(peca.getQtdEstoque() - quantidade);
+        pecaRepository.save(peca);
+
+        return ordemServicoRepository.save(os);
+    }
+
+    @Transactional
+    public OrdemDeServico removerPeca(Long osId, Long pecaId) {
+        OrdemDeServico os = ordemServicoRepository.findById(osId)
+                .orElseThrow(() -> new IllegalArgumentException("Ordem de Serviço não encontrada."));
+
+        ItemServico itemParaRemover = os.getItens().stream()
+                .filter(item -> item.getPeca().getId().equals(pecaId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Peça não encontrada nesta Ordem de Serviço."));
+
+        Peca peca = itemParaRemover.getPeca();
+        int quantidadeDevolvida = itemParaRemover.getQtdUsada();
+
+        peca.setQtdEstoque(peca.getQtdEstoque() + quantidadeDevolvida);
+        pecaRepository.save(peca);
+
+        os.getItens().remove(itemParaRemover);
+
+        return ordemServicoRepository.save(os);
     }
 }
 

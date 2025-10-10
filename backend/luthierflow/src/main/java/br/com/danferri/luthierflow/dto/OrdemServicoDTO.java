@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 public class OrdemServicoDTO {
@@ -20,6 +22,7 @@ public class OrdemServicoDTO {
     private BigDecimal valorMaoDeObra;
     private ClienteDTO cliente;
     private InstrumentoDTO instrumento;
+    private Set<ItemServicoDTO> itens;
 
     public OrdemServicoDTO(OrdemDeServico os) {
         this.id = os.getId();
@@ -34,5 +37,8 @@ public class OrdemServicoDTO {
         if (os.getInstrumento() != null) {
             this.instrumento = new InstrumentoDTO(os.getInstrumento());
         }
+        this.itens = os.getItens().stream()
+                .map(ItemServicoDTO::new)
+                .collect(Collectors.toSet());
     }
 }
