@@ -1,0 +1,39 @@
+# ===================================================================
+# ARQUIVO DE EXEMPLO DE CONFIGURAÇÃO PARA O PROJETO LUTHIERFLOW
+# ===================================================================
+# Este arquivo deve ser renomeado para 'application.properties' e
+# as variáveis de ambiente devem ser configuradas para rodar o projeto.
+# O arquivo 'application.properties' original não deve ser versionado.
+# ===================================================================
+
+
+# Nome da Aplicação
+spring.application.name=luthierflow
+
+
+# Configuração da Conexão com o Banco de Dados MySQL
+# A URL aponta para um banco de dados local chamado 'luthierflow_db'.
+# O usuário e a senha são lidos a partir de variáveis de ambiente por segurança.
+spring.datasource.url=jdbc:mysql://localhost:3306/luthierflow_db
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
+
+# Configurações do Hibernate (a implementação do JPA)
+# 'update' -> O Hibernate tentará atualizar o schema do BD com base nas suas classes Java.
+# Ótimo para ambiente de desenvolvimento.
+spring.jpa.hibernate.ddl-auto=update
+
+
+# Mostra no console o SQL que o Hibernate está executando. Ótimo para debug.
+spring.jpa.show-sql=true
+
+
+# ===============================================================
+# INSTRUÇÕES PARA RODAR O PROJETO:
+#
+# Configure as seguintes variáveis de ambiente na sua IDE ou sistema:
+#
+# DB_USERNAME=seu_usuario_do_banco  (ex: root)
+# DB_PASSWORD=sua_senha_do_banco    (ex: dan123)
+# ===============================================================
