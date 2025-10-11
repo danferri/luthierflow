@@ -34,6 +34,6 @@ spring.jpa.show-sql=true
 #
 # Configure as seguintes variáveis de ambiente na sua IDE ou sistema:
 #
-# DB_USERNAME=seu_usuario_do_banco  (ex: root)
-# DB_PASSWORD=sua_senha_do_banco    (ex: dan123)
+# DB_USERNAME=seu_usuario_do_banco
+# DB_PASSWORD=sua_senha_do_banco
 # ===============================================================
