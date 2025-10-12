@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface PecaRepository extends JpaRepository<Peca, Long> {
-    Optional<Peca> findByNomePecaAndFabricante(String nomePeca, String fabricante);
+    Optional<Peca> findByNomePecaAndFabricanteAndModelo(String nomePeca, String fabricante, String modelo);
 }

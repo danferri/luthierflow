@@ -16,6 +16,7 @@ public class Peca {
     private Long id;
 
     private String nomePeca;
+    private String modelo;
     private String fabricante;
     private int qtdEstoque;
     private BigDecimal precoVenda;

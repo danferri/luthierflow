@@ -22,10 +22,11 @@ public class PecaService {
     }
 
     public Peca salvar(Peca peca) {
-        Optional<Peca> pecaExistente = pecaRepository.findByNomePecaAndFabricante(peca.getNomePeca(), peca.getFabricante());
+        Optional<Peca> pecaExistente = pecaRepository.findByNomePecaAndFabricanteAndModelo(
+                peca.getNomePeca(), peca.getFabricante(), peca.getModelo());
 
         if (pecaExistente.isPresent()) {
-            throw new IllegalArgumentException("Peça com mesmo nome e fabricante já cadastrada");
+            throw new IllegalArgumentException("Peça com mesmo nome, fabricante e modelo já cadastrada");
         }
         return pecaRepository.save(peca);
     }
@@ -34,6 +35,7 @@ public class PecaService {
         return pecaRepository.findById(id)
                 .map(pecaExistente -> {
                     pecaExistente.setNomePeca(pecaAtualizada.getNomePeca());
+                    pecaExistente.setModelo(pecaAtualizada.getModelo());
                     pecaExistente.setFabricante(pecaAtualizada.getFabricante());
                     pecaExistente.setQtdEstoque(pecaAtualizada.getQtdEstoque());
                     pecaExistente.setPrecoVenda(pecaAtualizada.getPrecoVenda());
