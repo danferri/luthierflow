@@ -51,11 +51,19 @@ public class InstrumentoService {
         return instrumentoRepository.findById(instrumentoId)
                 .filter(instrumento -> instrumento.getCliente().getId().equals(clienteId))
                 .map(instrumentoExistente -> {
-                   instrumentoExistente.setMarca(instrumentoAtualizado.getMarca());
-                   instrumentoExistente.setModelo(instrumentoAtualizado.getModelo());
-                   instrumentoExistente.setTipo(instrumentoAtualizado.getTipo());
-                   instrumentoExistente.setNumeroSerie(instrumentoAtualizado.getNumeroSerie());
-                   return instrumentoRepository.save(instrumentoExistente);
+                    if (instrumentoAtualizado.getMarca() != null) {
+                        instrumentoExistente.setMarca(instrumentoAtualizado.getMarca());
+                    }
+                    if (instrumentoAtualizado.getModelo() != null) {
+                        instrumentoExistente.setModelo(instrumentoAtualizado.getModelo());
+                    }
+                    if (instrumentoAtualizado.getTipo() != null) {
+                        instrumentoExistente.setTipo(instrumentoAtualizado.getTipo());
+                    }
+                    if (instrumentoAtualizado.getNumeroSerie() != null) {
+                        instrumentoExistente.setNumeroSerie(instrumentoAtualizado.getNumeroSerie());
+                    }
+                    return instrumentoRepository.save(instrumentoExistente);
                 });
     }
 

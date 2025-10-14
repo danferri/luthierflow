@@ -33,13 +33,27 @@ public class ClienteService {
     public Optional<Cliente> atualizar(Long id, Cliente clienteAtualizado) {
         return clienteRepository.findById(id)
                 .map(clienteExistente -> {
-                    clienteExistente.setNome(clienteAtualizado.getNome());
-                    clienteExistente.setEmail(clienteAtualizado.getEmail());
-                    clienteExistente.setCpf(clienteAtualizado.getCpf());
-                    clienteExistente.setCep(clienteAtualizado.getCep());
-                    clienteExistente.setRua(clienteAtualizado.getRua());
-                    clienteExistente.setCidade(clienteAtualizado.getCidade());
-                    clienteExistente.setEstado(clienteAtualizado.getEstado());
+                    if (clienteAtualizado.getNome() != null) {
+                        clienteExistente.setNome(clienteAtualizado.getNome());
+                    }
+                    if (clienteAtualizado.getEmail() != null) {
+                        clienteExistente.setEmail(clienteAtualizado.getEmail());
+                    }
+                    if (clienteAtualizado.getCpf() != null) {
+                        clienteExistente.setCpf(clienteAtualizado.getCpf());
+                    }
+                    if (clienteAtualizado.getCep() != null) {
+                        clienteExistente.setCep(clienteAtualizado.getCep());
+                    }
+                    if (clienteAtualizado.getRua() != null) {
+                        clienteExistente.setRua(clienteAtualizado.getRua());
+                    }
+                    if (clienteAtualizado.getCidade() != null) {
+                        clienteExistente.setCidade(clienteAtualizado.getCidade());
+                    }
+                    if (clienteAtualizado.getEstado() != null) {
+                        clienteExistente.setEstado(clienteAtualizado.getEstado());
+                    }
                     return clienteRepository.save(clienteExistente);
                 });
     }

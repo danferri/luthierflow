@@ -34,11 +34,21 @@ public class PecaService {
     public Optional<Peca> atualizar(Long id, Peca pecaAtualizada) {
         return pecaRepository.findById(id)
                 .map(pecaExistente -> {
-                    pecaExistente.setNomePeca(pecaAtualizada.getNomePeca());
-                    pecaExistente.setModelo(pecaAtualizada.getModelo());
-                    pecaExistente.setFabricante(pecaAtualizada.getFabricante());
+                    if (pecaAtualizada.getNomePeca() != null) {
+                        pecaExistente.setNomePeca(pecaAtualizada.getNomePeca());
+                    }
+                    if (pecaAtualizada.getFabricante() != null) {
+                        pecaExistente.setFabricante(pecaAtualizada.getFabricante());
+                    }
+                    if (pecaAtualizada.getModelo() != null) {
+                        pecaExistente.setModelo(pecaAtualizada.getModelo());
+                    }
+
                     pecaExistente.setQtdEstoque(pecaAtualizada.getQtdEstoque());
-                    pecaExistente.setPrecoVenda(pecaAtualizada.getPrecoVenda());
+
+                    if (pecaAtualizada.getPrecoVenda() != null) {
+                        pecaExistente.setPrecoVenda(pecaAtualizada.getPrecoVenda());
+                    }
                     return pecaRepository.save(pecaExistente);
                 });
     }

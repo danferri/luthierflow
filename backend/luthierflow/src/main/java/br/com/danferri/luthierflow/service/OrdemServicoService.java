@@ -59,16 +59,25 @@ public class OrdemServicoService {
     public Optional<OrdemDeServico> atualizar(Long id, OrdemDeServico osAtualizada) {
         return ordemServicoRepository.findById(id)
                 .map(osExistente -> {
-                    osExistente.setTipoServico(osAtualizada.getTipoServico());
-                    osExistente.setDescricaoProblema(osAtualizada.getDescricaoProblema());
-                    osExistente.setDiagnosticoServico(osAtualizada.getDiagnosticoServico());
-                    osExistente.setValorMaoDeObra(osAtualizada.getValorMaoDeObra());
-                    osExistente.setStatus(osAtualizada.getStatus());
-
-                    if (osAtualizada.getStatus() == StatusOS.FINALIZADO) {
-                        osExistente.setDataFinalizacao(LocalDate.now());
+                    if (osAtualizada.getTipoServico() != null) {
+                        osExistente.setTipoServico(osAtualizada.getTipoServico());
                     }
+                    if (osAtualizada.getDescricaoProblema() != null) {
+                        osExistente.setDescricaoProblema(osAtualizada.getDescricaoProblema());
+                    }
+                    if (osAtualizada.getDiagnosticoServico() != null) {
+                        osExistente.setDiagnosticoServico(osAtualizada.getDiagnosticoServico());
+                    }
+                    if (osAtualizada.getValorMaoDeObra() != null) {
+                        osExistente.setValorMaoDeObra(osAtualizada.getValorMaoDeObra());
+                    }
+                    if (osAtualizada.getStatus() != null) {
+                        osExistente.setStatus(osAtualizada.getStatus());
 
+                        if (osAtualizada.getStatus() == StatusOS.FINALIZADO) {
+                            osExistente.setDataFinalizacao(LocalDate.now());
+                        }
+                    }
                     return ordemServicoRepository.save(osExistente);
                 });
     }
