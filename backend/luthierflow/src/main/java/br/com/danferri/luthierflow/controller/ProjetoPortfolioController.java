@@ -6,6 +6,7 @@ import br.com.danferri.luthierflow.service.ProjetoPortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,8 +39,21 @@ public class ProjetoPortfolioController {
             ProjetoPortfolio novoProjeto = projetoPortfolioService.promoverParaPortfolio(ordemDeServicoId);
             return ResponseEntity.ok(new ProjetoPortfolioDTO(novoProjeto));
         } catch (IllegalStateException | IllegalArgumentException e) {
-            // Retorna 400 Bad Request com a mensagem de erro da regra de negócio
             return ResponseEntity.badRequest().header("X-Error-Message", e.getMessage()).build();
+        }
+    }
+
+    @PostMapping("/{id}/fotos")
+    public ResponseEntity<ProjetoPortfolioDTO> adicionarFoto(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("legenda") String legenda,
+            @RequestParam("ordemExibicao") Integer ordemExibicao) {
+        try {
+            ProjetoPortfolio projetoAtualizado = projetoPortfolioService.adicionarFoto(id, file, legenda, ordemExibicao);
+            return ResponseEntity.ok(new ProjetoPortfolioDTO(projetoAtualizado));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 

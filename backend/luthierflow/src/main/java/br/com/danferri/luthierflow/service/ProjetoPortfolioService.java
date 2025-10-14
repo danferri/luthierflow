@@ -1,5 +1,6 @@
 package br.com.danferri.luthierflow.service;
 
+import br.com.danferri.luthierflow.domain.FotoPortfolio;
 import br.com.danferri.luthierflow.domain.OrdemDeServico;
 import br.com.danferri.luthierflow.domain.ProjetoPortfolio;
 import br.com.danferri.luthierflow.domain.enums.StatusOS;
@@ -8,6 +9,7 @@ import br.com.danferri.luthierflow.repository.ProjetoPortfolioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +23,9 @@ public class ProjetoPortfolioService {
 
     @Autowired
     private OrdemServicoRepository ordemServicoRepository;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     public List<ProjetoPortfolio> listarTodos() {
         return projetoPortfolioRepository.findAll();
@@ -68,6 +73,24 @@ public class ProjetoPortfolioService {
 
                     return projetoPortfolioRepository.save(projetoExistente);
                 });
+    }
+
+    @Transactional
+    public ProjetoPortfolio adicionarFoto(Long portfolioId, MultipartFile file, String legenda, Integer ordemExibicao) {
+
+        ProjetoPortfolio projeto = projetoPortfolioRepository.findById(portfolioId)
+                .orElseThrow(() -> new IllegalArgumentException("Projeto de Portfólio não encontrado."));
+
+        String nomeArquivo = fileStorageService.storeFile(file);
+
+        FotoPortfolio novaFoto = new FotoPortfolio();
+        novaFoto.setUrlImagem(nomeArquivo);
+        novaFoto.setLegenda(legenda);
+        novaFoto.setOrdemExibicao(ordemExibicao);
+
+        projeto.adicionarFoto(novaFoto);
+
+        return projetoPortfolioRepository.save(projeto);
     }
 
     public void deletar(Long id) {
