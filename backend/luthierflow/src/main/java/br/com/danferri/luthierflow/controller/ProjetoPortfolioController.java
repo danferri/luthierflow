@@ -33,6 +33,14 @@ public class ProjetoPortfolioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/publico")
+    public ResponseEntity<List<ProjetoPortfolioDTO>> listarProjetosPublicos() {
+        List<ProjetoPortfolioDTO> projetosPublicos = projetoPortfolioService.listarPublicados().stream()
+                .map(ProjetoPortfolioDTO::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(projetosPublicos);
+    }
+
     @PostMapping
     public ResponseEntity<ProjetoPortfolioDTO> promoverOrdemDeServico(@RequestParam Long ordemDeServicoId) {
         try {

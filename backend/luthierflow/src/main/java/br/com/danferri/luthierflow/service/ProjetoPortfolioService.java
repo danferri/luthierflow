@@ -62,14 +62,22 @@ public class ProjetoPortfolioService {
     public Optional<ProjetoPortfolio> atualizar(Long id, ProjetoPortfolio projetoAtualizado) {
         return projetoPortfolioRepository.findById(id)
                 .map(projetoExistente -> {
-                    projetoExistente.setTituloPublico(projetoAtualizado.getTituloPublico());
-                    projetoExistente.setDescricaoPublica(projetoAtualizado.getDescricaoPublica());
-
-                    String novoStatus = projetoAtualizado.getStatusPublicacao();
-                    if ("PUBLICADO".equalsIgnoreCase(novoStatus) && !"PUBLICADO".equalsIgnoreCase(projetoExistente.getStatusPublicacao())) {
-                        projetoExistente.setDataPublicacao(LocalDate.now());
+                    if (projetoAtualizado.getTituloPublico() != null) {
+                        projetoExistente.setTituloPublico(projetoAtualizado.getTituloPublico());
                     }
-                    projetoExistente.setStatusPublicacao(novoStatus);
+
+                    if (projetoAtualizado.getDescricaoPublica() != null) {
+                        projetoExistente.setDescricaoPublica(projetoAtualizado.getDescricaoPublica());
+                    }
+
+                    if (projetoAtualizado.getStatusPublicacao() != null) {
+                        String novoStatus = projetoAtualizado.getStatusPublicacao();
+
+                        if ("PUBLICADO".equalsIgnoreCase(novoStatus) && !"PUBLICADO".equalsIgnoreCase(projetoExistente.getStatusPublicacao())) {
+                            projetoExistente.setDataPublicacao(LocalDate.now());
+                        }
+                        projetoExistente.setStatusPublicacao(novoStatus);
+                    }
 
                     return projetoPortfolioRepository.save(projetoExistente);
                 });
@@ -91,6 +99,10 @@ public class ProjetoPortfolioService {
         projeto.adicionarFoto(novaFoto);
 
         return projetoPortfolioRepository.save(projeto);
+    }
+
+    public List<ProjetoPortfolio> listarPublicados() {
+        return projetoPortfolioRepository.findByStatusPublicacao("PUBLICADO");
     }
 
     public void deletar(Long id) {
