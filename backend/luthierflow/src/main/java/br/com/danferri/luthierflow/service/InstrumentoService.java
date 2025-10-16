@@ -30,7 +30,7 @@ public class InstrumentoService {
 
         Optional<Instrumento> instrumentoExistente = instrumentoRepository.findByNumeroSerieAndClienteId(instrumento.getNumeroSerie(), clientId);
         if (instrumentoExistente.isPresent()) {
-            throw new IllegalArgumentException("Instrumento com o mesm o número de série já cadastrado para este cliente.");
+            throw new IllegalArgumentException("Instrumento com o mesmo número de série já cadastrado para este cliente.");
         }
 
         Optional<Cliente> clienteOpt = clienteRepository.findById(clientId);
