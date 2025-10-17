@@ -20,7 +20,7 @@ public class OrdemServicoDTO {
     private String descricaoProblema;
     private String diagnosticoServico;
     private BigDecimal valorMaoDeObra;
-    private ClienteDTO cliente;
+    private ClienteResponseDTO cliente;
     private InstrumentoDTO instrumento;
     private Set<ItemServicoDTO> itens;
 
@@ -33,7 +33,7 @@ public class OrdemServicoDTO {
         this.descricaoProblema = os.getDescricaoProblema();
         this.diagnosticoServico = os.getDiagnosticoServico();
         this.valorMaoDeObra = os.getValorMaoDeObra();
-        this.cliente = new ClienteDTO(os.getCliente());
+        this.cliente = new ClienteResponseDTO(os.getCliente());
         if (os.getInstrumento() != null) {
             this.instrumento = new InstrumentoDTO(os.getInstrumento());
         }

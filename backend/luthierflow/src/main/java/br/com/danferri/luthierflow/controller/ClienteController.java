@@ -1,6 +1,7 @@
 package br.com.danferri.luthierflow.controller;
 
-import br.com.danferri.luthierflow.domain.Cliente;
+import br.com.danferri.luthierflow.dto.ClienteRequestDTO;
+import br.com.danferri.luthierflow.dto.ClienteResponseDTO;
 import br.com.danferri.luthierflow.service.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,29 +18,31 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> listarTodosOsClientes() {
-        List<Cliente> clientes = clienteService.listarTodosClientes();
+    public ResponseEntity<List<ClienteResponseDTO>> listarTodosOsClientes() {
+        // NOTE: Agora retorna uma lista de DTOs.
+        List<ClienteResponseDTO> clientes = clienteService.listarTodosClientes();
         return ResponseEntity.ok(clientes);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
+    public ResponseEntity<ClienteResponseDTO> buscarClientePorId(@PathVariable Long id) {
+        // NOTE: Agora retorna o DTO de resposta.
         return clienteService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    @Valid
-    public ResponseEntity<Cliente> adicionarCliente(@RequestBody Cliente cliente) {
-        Cliente novoCliente = clienteService.salvar(cliente);
+    public ResponseEntity<ClienteResponseDTO> adicionarCliente(@RequestBody @Valid ClienteRequestDTO clienteDTO) {
+        // NOTE: Recebe o DTO de requisição e ativa a validação com @Valid.
+        ClienteResponseDTO novoCliente = clienteService.salvar(clienteDTO);
         return ResponseEntity.ok(novoCliente);
     }
 
     @PutMapping("/{id}")
-    @Valid
-    public ResponseEntity<Cliente> atualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
-        return clienteService.atualizar(id, cliente)
+    public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable Long id, @RequestBody @Valid ClienteRequestDTO clienteDTO) {
+        // NOTE: Também recebe o DTO de requisição para a atualização.
+        return clienteService.atualizar(id, clienteDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
