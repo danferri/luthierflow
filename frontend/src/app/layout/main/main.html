@@ -1,0 +1,23 @@
+<div class="main-container">
+  <aside class="sidebar">
+    <h1 class="logo">LuthierFlow</h1>
+    <nav class="main-nav">
+      <ul>
+        <li><a routerLink="/dashboard">Início</a></li>
+        <li><a>Ordens de Serviço</a></li>
+        <li><a routerLink="/clientes">Clientes</a></li> 
+        <li><a>Estoque</a></li>
+        <li><a>Portfólio</a></li>
+      </ul>
+    </nav>
+    <div class="logout-section">
+      <a (click)="logout()">Logout</a>
+    </div>
+  </aside>
+  <main class="content-area">
+    <header class="top-header"></header>
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@aws-amplify/ui/styles.css';
+
+/* --- NOVO --- */
+/* Reseta a margem e o padding padrão do navegador */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f4f7fa; /* Define a cor de fundo padrão */
+}/* You can add global styles to this file, and also import other style files */
