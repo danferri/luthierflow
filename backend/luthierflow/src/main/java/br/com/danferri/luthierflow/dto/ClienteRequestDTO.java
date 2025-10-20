@@ -5,9 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-// NOTE: Usamos um DTO específico para a entrada de dados.
-// Ele não tem 'id' porque o cliente não deve enviar um ID ao criar um novo registro.
-// Também adicionamos as anotações de validação aqui, no portão de entrada da API.
 @Data
 public class ClienteRequestDTO {
 
@@ -22,7 +19,6 @@ public class ClienteRequestDTO {
     @Size(min = 11, max = 11, message = "O CPF deve ter 11 dígitos.")
     private String cpf;
 
-    // Adicione os outros campos que você espera receber do cliente
     private String cep;
     private String rua;
     private String cidade;

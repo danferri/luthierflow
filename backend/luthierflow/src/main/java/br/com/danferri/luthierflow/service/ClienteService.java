@@ -18,19 +18,19 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     public List<ClienteResponseDTO> listarTodosClientes() {
-        // NOTE: Busca todos os clientes e os converte para DTO.
         return clienteRepository.findAll().stream()
-                .map(ClienteResponseDTO::new) // Equivalente a .map(cliente -> new ClienteResponseDTO(cliente))
+                .map(ClienteResponseDTO::new)
                 .collect(Collectors.toList());
     }
 
     public Optional<ClienteResponseDTO> buscarPorId(Long id) {
-        // NOTE: Busca o cliente e, se encontrar, converte para DTO.
         return clienteRepository.findById(id).map(ClienteResponseDTO::new);
     }
 
     public ClienteResponseDTO salvar(ClienteRequestDTO dto) {
-        // NOTE: Converte o DTO de requisição para a entidade Cliente.
+        if (clienteRepository.findByCpf(dto.getCpf()).isPresent()) {
+            throw new IllegalArgumentException("CPF já cadastrado no sistema");
+        }
         Cliente cliente = new Cliente();
         cliente.setNome(dto.getNome());
         cliente.setEmail(dto.getEmail());
@@ -41,32 +41,43 @@ public class ClienteService {
         cliente.setEstado(dto.getEstado());
 
         Cliente clienteSalvo = clienteRepository.save(cliente);
-
-        // NOTE: Converte a entidade salva de volta para um DTO de resposta.
         return new ClienteResponseDTO(clienteSalvo);
     }
 
     public Optional<ClienteResponseDTO> atualizar(Long id, ClienteRequestDTO dto) {
-        // NOTE: Busca o cliente existente.
+        // 1. Busca o cliente existente no banco de dados pelo ID.
         return clienteRepository.findById(id)
                 .map(clienteExistente -> {
-                    // NOTE: Atualiza os dados do cliente existente com os dados do DTO.
-                    clienteExistente.setNome(dto.getNome());
-                    clienteExistente.setEmail(dto.getEmail());
-                    clienteExistente.setCpf(dto.getCpf());
-                    clienteExistente.setCep(dto.getCep());
-                    clienteExistente.setRua(dto.getRua());
-                    clienteExistente.setCidade(dto.getCidade());
-                    clienteExistente.setEstado(dto.getEstado());
+
+                    if (dto.getNome() != null) {
+                        clienteExistente.setNome(dto.getNome());
+                    }
+                    if (dto.getEmail() != null) {
+                        clienteExistente.setEmail(dto.getEmail());
+                    }
+                    if (dto.getCpf() != null) {
+                        clienteExistente.setCpf(dto.getCpf());
+                    }
+                    if (dto.getCep() != null) {
+                        clienteExistente.setCep(dto.getCep());
+                    }
+                    if (dto.getRua() != null) {
+                        clienteExistente.setRua(dto.getRua());
+                    }
+                    if (dto.getCidade() != null) {
+                        clienteExistente.setCidade(dto.getCidade());
+                    }
+                    if (dto.getEstado() != null) {
+                        clienteExistente.setEstado(dto.getEstado());
+                    }
 
                     Cliente clienteAtualizado = clienteRepository.save(clienteExistente);
-                    // NOTE: Converte para DTO e retorna.
+
                     return new ClienteResponseDTO(clienteAtualizado);
                 });
     }
 
     public void deletar(Long id) {
-        // (Não precisa de alteração)
         clienteRepository.deleteById(id);
     }
 }

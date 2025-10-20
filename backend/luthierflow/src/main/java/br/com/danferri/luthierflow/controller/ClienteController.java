@@ -19,14 +19,12 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<ClienteResponseDTO>> listarTodosOsClientes() {
-        // NOTE: Agora retorna uma lista de DTOs.
         List<ClienteResponseDTO> clientes = clienteService.listarTodosClientes();
         return ResponseEntity.ok(clientes);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> buscarClientePorId(@PathVariable Long id) {
-        // NOTE: Agora retorna o DTO de resposta.
         return clienteService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -34,14 +32,12 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> adicionarCliente(@RequestBody @Valid ClienteRequestDTO clienteDTO) {
-        // NOTE: Recebe o DTO de requisição e ativa a validação com @Valid.
         ClienteResponseDTO novoCliente = clienteService.salvar(clienteDTO);
         return ResponseEntity.ok(novoCliente);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable Long id, @RequestBody @Valid ClienteRequestDTO clienteDTO) {
-        // NOTE: Também recebe o DTO de requisição para a atualização.
         return clienteService.atualizar(id, clienteDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
