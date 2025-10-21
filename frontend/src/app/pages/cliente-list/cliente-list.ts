@@ -1,13 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+export interface Cliente {
+  id: number;
+  nome: string;
+  email?: string;
+  cpf: String;
+}
+
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class ClienteService {
+  constructor(private http: HttpClient) {}
+
+  listar(): Observable<Cliente[]> {
+  const apiUrl = 'http://localhost:8080/clientes'; 
+  return this.http.get<Cliente[]>(apiUrl);
+  }
+}
 
 @Component({
   selector: 'app-cliente-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule], 
   templateUrl: './cliente-list.html',
-  styleUrl: './cliente-list.scss'
+  styleUrls: ['./cliente-list.scss']
 })
-export class ClienteListComponent { // <-- ESTE É O NOME CORRETO E OFICIAL
+export class ClienteListComponent implements OnInit {
+  
+  clientes: Cliente[] = [];
+  
+  constructor(private clienteService: ClienteService) {}
+  
+  ngOnInit(): void {
+    this.buscarClientes();
+  }
+  
+  buscarClientes(): void {
+    this.clienteService.listar() 
+      .subscribe({ 
+        next: (dados) => {          
+          this.clientes = dados;
+        },
+        error: (erro) => {
 
+          console.error('Erro ao buscar clientes:', erro);
+          
+        }
+      });
+  }
 }

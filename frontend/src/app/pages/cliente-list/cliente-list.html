@@ -1,1 +1,31 @@
-<p>cliente-list works!</p>
+<div class="list-container">
+  <div class="list-header">
+    <h2>Clientes</h2>
+    <button class="btn-add">+ Novo Cliente</button> </div>
+
+  <input type="text" placeholder="Buscar por nome..." class="search-input">
+
+  <table *ngIf="clientes.length > 0; else semClientes" class="client-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th> <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cliente of clientes">
+        <td>{{ cliente.id }}</td>
+        <td>{{ cliente.nome }}</td>
+        <td>{{ cliente.email }}</td>
+        <td>{{ cliente.cpf }}</td> <td>
+          <button class="btn-icon btn-edit">✏️</button> <button class="btn-icon btn-delete">🗑️</button> </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #semClientes>
+    <p class="empty-message">Nenhum cliente cadastrado ainda.</p>
+  </ng-template>
+</div>
