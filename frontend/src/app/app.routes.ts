@@ -36,7 +36,14 @@ export const routes: Routes = [
         path: 'clientes',
         loadComponent: () => import('./pages/cliente-list/cliente-list').then(m => m.ClienteListComponent)
       },
-      
+      {        
+        path: 'clientes/novo',
+        loadComponent: () => import('./pages/cliente-form/cliente-form').then(m => m.ClienteFormComponent)
+      },
+      {        
+        path: 'clientes/editar/:id',
+        loadComponent: () => import('./pages/cliente-form/cliente-form').then(m => m.ClienteFormComponent)
+      },      
       {
         path: '',
         redirectTo: 'dashboard',

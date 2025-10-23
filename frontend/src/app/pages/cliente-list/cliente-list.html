@@ -1,7 +1,8 @@
 <div class="list-container">
   <div class="list-header">
     <h2>Clientes</h2>
-    <button class="btn-add">+ Novo Cliente</button> </div>
+    <button class="btn-add" routerLink="/clientes/novo">+ Novo Cliente</button> 
+  </div>
 
   <input type="text" placeholder="Buscar por nome..." class="search-input">
 
@@ -19,7 +20,7 @@
         <td>{{ cliente.id }}</td>
         <td>{{ cliente.nome }}</td>
         <td>{{ cliente.email }}</td>
-        <td>{{ cliente.cpf }}</td> <td>
+        <td>{{ cliente.telefone }}</td> <td>
           <button class="btn-icon btn-edit">✏️</button> <button class="btn-icon btn-delete">🗑️</button> </td>
       </tr>
     </tbody>
