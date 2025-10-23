@@ -43,9 +43,20 @@ export class ClienteFormComponent implements OnInit {
     this.clienteForm.markAllAsTouched();
     
     if (this.clienteForm.valid) {
-      console.log('Formulário válido!', this.clienteForm.value);
+      const formValues = this.clienteForm.value;
+    
+      const novoCliente: Partial<Cliente> = {
+        nome: formValues.nome,
+        email: formValues.email,
+        cpf: formValues.cpf,
+        telefones: [formValues.telefone],
+        cep: formValues.cep,
+        rua: formValues.rua,
+        cidade: formValues.cidade,
+        estado: formValues.estado
+      } as Partial<Cliente>;
 
-      const novoCliente: Cliente = this.clienteForm.value;
+      console.log('Formulário válido!', this.clienteForm.value);
       
       this.clienteService.salvar(novoCliente).subscribe({
         next: () => {

@@ -20,8 +20,10 @@
         <td>{{ cliente.id }}</td>
         <td>{{ cliente.nome }}</td>
         <td>{{ cliente.email }}</td>
-        <td>{{ cliente.telefone }}</td> <td>
-          <button class="btn-icon btn-edit">✏️</button> <button class="btn-icon btn-delete">🗑️</button> </td>
+        <td>{{ cliente.telefones && cliente.telefones.length > 0 ? cliente.telefones[0] : '-' }}</td> <td>
+          <button class="btn-icon btn-edit">✏️</button>
+          <button class="btn-icon btn-delete">🗑️</button> 
+        </td>
       </tr>
     </tbody>
   </table>

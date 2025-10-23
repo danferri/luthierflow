@@ -7,7 +7,7 @@ export interface Cliente {
   nome: string;
   email?: string;
   cpf: string;
-  telefone: string;
+  telefones: string[];
   // Add outros campos se necessário (cep, rua, etc.)
 }
 
@@ -28,5 +28,5 @@ export class ClienteService {
     return this.http.get<Cliente[]>(this.apiUrl);
   }
 
-  // TODO: Adicionar métodos salvar(), atualizar(), deletar() aqui futuramente
+  // TODO: Adicionar métodos atualizar(), deletar() aqui futuramente
 }
