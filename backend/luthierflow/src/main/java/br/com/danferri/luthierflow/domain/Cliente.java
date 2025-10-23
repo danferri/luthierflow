@@ -1,13 +1,13 @@
 package br.com.danferri.luthierflow.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity (name = "CLIENTE")
 @Data
@@ -22,10 +22,16 @@ public class Cliente {
     private String nome;
 
     @NotBlank(message = "O CPF do cliente é obrigatório.")
+    @Column(unique = true, nullable = false)
     private String cpf;
 
     @Email(message = "O formato do e-mail é inválido.")
     private String email;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "CLIENTE_TELEFONE", joinColumns = @JoinColumn(name = "id_cliente"))
+    @Column(name = "telefone")
+    private List<String> telefones = new ArrayList<>();
 
     private String rua;
     private String cidade;

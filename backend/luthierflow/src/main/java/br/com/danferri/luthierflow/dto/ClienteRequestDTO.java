@@ -2,8 +2,11 @@ package br.com.danferri.luthierflow.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class ClienteRequestDTO {
@@ -18,6 +21,9 @@ public class ClienteRequestDTO {
     @NotBlank(message = "O CPF não pode estar em branco.")
     @Size(min = 11, max = 11, message = "O CPF deve ter 11 dígitos.")
     private String cpf;
+
+    @NotEmpty(message = "Pelo menos um telefone deve ser fornecido.")
+    private List<String> telefones;
 
     private String cep;
     private String rua;

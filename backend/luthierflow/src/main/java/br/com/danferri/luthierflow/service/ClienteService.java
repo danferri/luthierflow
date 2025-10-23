@@ -35,6 +35,7 @@ public class ClienteService {
         cliente.setNome(dto.getNome());
         cliente.setEmail(dto.getEmail());
         cliente.setCpf(dto.getCpf());
+        cliente.setTelefones(dto.getTelefones());
         cliente.setCep(dto.getCep());
         cliente.setRua(dto.getRua());
         cliente.setCidade(dto.getCidade());
@@ -45,7 +46,6 @@ public class ClienteService {
     }
 
     public Optional<ClienteResponseDTO> atualizar(Long id, ClienteRequestDTO dto) {
-        // 1. Busca o cliente existente no banco de dados pelo ID.
         return clienteRepository.findById(id)
                 .map(clienteExistente -> {
 
@@ -69,6 +69,9 @@ public class ClienteService {
                     }
                     if (dto.getEstado() != null) {
                         clienteExistente.setEstado(dto.getEstado());
+                    }
+                    if (dto.getTelefones() != null && !dto.getTelefones().isEmpty()) {
+                        clienteExistente.setTelefones(dto.getTelefones());
                     }
 
                     Cliente clienteAtualizado = clienteRepository.save(clienteExistente);
