@@ -21,7 +21,7 @@
         <td>{{ cliente.nome }}</td>
         <td>{{ cliente.email }}</td>
         <td>{{ cliente.telefones && cliente.telefones.length > 0 ? cliente.telefones[0] : '-' }}</td> <td>
-          <button class="btn-icon btn-edit">✏️</button>
+          <button class="btn-icon btn-edit" [routerLink]="['/clientes/editar', cliente.id]">✏️</button>
           <button class="btn-icon btn-delete">🗑️</button> 
         </td>
       </tr>

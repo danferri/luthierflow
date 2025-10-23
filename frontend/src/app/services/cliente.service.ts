@@ -8,12 +8,16 @@ export interface Cliente {
   email?: string;
   cpf: string;
   telefones: string[];
-  // Add outros campos se necessário (cep, rua, etc.)
+  cep?: string;
+  rua?: string;
+  cidade?: string;
+  estado?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ClienteService {
   
   private apiUrl = 'http://localhost:8080/clientes';
@@ -28,5 +32,15 @@ export class ClienteService {
     return this.http.get<Cliente[]>(this.apiUrl);
   }
 
-  // TODO: Adicionar métodos atualizar(), deletar() aqui futuramente
+  buscarPorId(id: number): Observable<Cliente> {    
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.get<Cliente>(url);
+  }
+
+  atualizar(id: number, cliente: Partial<Cliente>): Observable<Cliente> {
+    const url = `${this.apiUrl}/${id}`;    
+    return this.http.put<Cliente>(url, cliente);
+  }
+
+  // TODO: Adicionar métodos deletar() aqui futuramente
 }
