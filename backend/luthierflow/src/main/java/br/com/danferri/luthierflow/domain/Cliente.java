@@ -5,16 +5,23 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity (name = "CLIENTE")
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE CLIENTE SET ativo = false WHERE id = ?")
+@Where(clause = "ativo = true")
 public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @NotBlank(message = "O nome do cliente é obrigatório.")
@@ -32,6 +39,9 @@ public class Cliente {
     @CollectionTable(name = "CLIENTE_TELEFONE", joinColumns = @JoinColumn(name = "id_cliente"))
     @Column(name = "telefone")
     private List<String> telefones = new ArrayList<>();
+
+    @Column(nullable = false)
+    private boolean ativo = true;
 
     private String rua;
     private String cidade;

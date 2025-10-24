@@ -81,6 +81,11 @@ public class ClienteService {
     }
 
     public void deletar(Long id) {
-        clienteRepository.deleteById(id);
+        Optional<Cliente> clienteOpt = clienteRepository.findById(id);
+        if (clienteOpt.isPresent()) {
+            Cliente cliente = clienteOpt.get();
+            cliente.setAtivo(false);
+            clienteRepository.save(cliente);
+        }
     }
 }
