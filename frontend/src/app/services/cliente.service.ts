@@ -42,5 +42,8 @@ export class ClienteService {
     return this.http.put<Cliente>(url, cliente);
   }
 
-  // TODO: Adicionar métodos deletar() aqui futuramente
+  deletar(id: number): Observable<void> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.delete<void>(url);
+  }  
 }
