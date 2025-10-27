@@ -5,11 +5,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ClienteService, Cliente } from '../../services/cliente.service';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-cliente-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgxMaskDirective],
   templateUrl: './cliente-form.html',
   styleUrls: ['./cliente-form.scss']
 })
@@ -35,7 +36,7 @@ export class ClienteFormComponent implements OnInit {
     this.clienteForm = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      cpf: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
+      cpf: ['', [Validators.required]],
       telefone: ['', Validators.required],
       cep: [''],
       rua: [''],

@@ -30,6 +30,7 @@
     "@angular/router": "^20.3.0",
     "@aws-amplify/ui-angular": "^5.1.5",
     "aws-amplify": "^6.15.7",
+    "ngx-mask": "^20.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

@@ -6,6 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 import { Amplify } from 'aws-amplify';
 import { authInterceptor } from './app/interceptors/auth-interceptor';
+import { provideNgxMask } from 'ngx-mask';
 
 Amplify.configure({
   Auth: {
@@ -19,6 +20,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
-    importProvidersFrom()
+    importProvidersFrom(),
+    provideNgxMask()
   ]
 }).catch((err) => console.error(err));

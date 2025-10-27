@@ -28,7 +28,7 @@
 
         <div class="form-field">
           <label for="cpf">CPF *</label>
-          <input type="text" id="cpf" formControlName="cpf" placeholder="Apenas números">
+          <input type="text" id="cpf" formControlName="cpf" placeholder="000.000.000-00" mask="000.000.000-00">
           <div *ngIf="clienteForm.controls['cpf'].invalid && (clienteForm.controls['cpf'].dirty || clienteForm.controls['cpf'].touched)" class="error-message">
             <small *ngIf="clienteForm.controls['cpf'].errors?.['required']">CPF é obrigatório.</small>
             <small *ngIf="clienteForm.controls['cpf'].errors?.['minlength'] || clienteForm.controls['cpf'].errors?.['maxlength']">CPF deve ter 11 dígitos.</small>
@@ -36,14 +36,14 @@
         </div>
 
         <div class="form-field">
-            <label for="telefone">Telefone *</label>
-            <input type="tel" id="telefone" formControlName="telefone" placeholder="(XX) XXXXX-XXXX">
-            <div *ngIf="clienteForm.controls['telefone'].invalid && (clienteForm.controls['telefone'].dirty || clienteForm.controls['telefone'].touched)" class="error-message">
-                <small *ngIf="clienteForm.controls['telefone'].errors?.['required']">Telefone é obrigatório.</small>
-            </div>
+          <label for="telefone">Telefone *</label>
+          <input type="tel" id="telefone" formControlName="telefone" placeholder="(00) 00000-0000" mask="(00) 0000-0000||(00) 00000-0000">
+          <div *ngIf="clienteForm.controls['telefone'].invalid && (clienteForm.controls['telefone'].dirty || clienteForm.controls['telefone'].touched)" class="error-message">
+            <small *ngIf="clienteForm.controls['telefone'].errors?.['required']">Telefone é obrigatório.</small>
+          </div>
         </div>
 
-        </div>
+      </div>
     </div>
 
     <div class="card form-section">
