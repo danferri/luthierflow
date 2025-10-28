@@ -28,21 +28,18 @@ public class FileStorageService {
     }
 
     public String storeFile(MultipartFile file) {
-        // Pega o nome original do arquivo
+
         String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         try {
-            // VALIDAÇÃO CORRIGIDA ADICIONADA AQUI:
-            // 1. Verifica se o arquivo está vazio.
             if (file.isEmpty()) {
                 throw new RuntimeException("Falha ao salvar arquivo vazio: " + originalFileName);
             }
-            // 2. Validação simples do nome do arquivo
+
             if (originalFileName.contains("..")) {
                 throw new RuntimeException("Nome de arquivo inválido: " + originalFileName);
             }
 
-            // Gera um nome de arquivo único para evitar colisões
             String fileExtension = "";
             try {
                 fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
@@ -51,9 +48,7 @@ public class FileStorageService {
             }
             String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
 
-            // Cria o caminho completo para o novo arquivo
             Path targetLocation = this.fileStorageLocation.resolve(uniqueFileName);
-            // Copia o arquivo enviado para o nosso diretório de destino
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             return uniqueFileName;

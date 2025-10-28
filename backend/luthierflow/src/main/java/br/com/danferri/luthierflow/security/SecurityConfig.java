@@ -21,10 +21,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 1. ADICIONE ESTA LINHA para habilitar a configuração de CORS que definiremos abaixo.
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // Suas configurações de segurança existentes permanecem as mesmas.
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
@@ -36,19 +34,18 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 2. ADICIONE ESTE MÉTODO INTEIRO. Ele define as regras de CORS para toda a aplicação.
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Permite requisições vindas do seu frontend Angular
+
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        // Permite os métodos HTTP necessários (incluindo OPTIONS para a verificação preflight)
+
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
-        // Permite os cabeçalhos necessários, incluindo o Authorization que o frontend envia
+
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Aplica esta configuração a TODOS os caminhos da sua API ("/**")
+
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
