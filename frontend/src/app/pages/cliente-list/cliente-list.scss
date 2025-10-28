@@ -46,7 +46,7 @@
   background-color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   border-radius: 8px;
-  overflow: hidden; // Para aplicar border-radius nas bordas da tabela
+  overflow: hidden;
 
   th, td {
     padding: 12px 15px;
@@ -63,8 +63,7 @@
   td {
     color: #6c757d;
   }
-
-  // Estilo para a última linha não ter borda inferior
+  
   tbody tr:last-child td {
     border-bottom: none;
   }

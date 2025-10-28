@@ -9,7 +9,6 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  // Aqui dentro ficará a lógica do nosso componente principal no futuro
+export class AppComponent {  
   title = 'LuthierFlow';
 }
