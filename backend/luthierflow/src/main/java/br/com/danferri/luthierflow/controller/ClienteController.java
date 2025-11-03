@@ -2,7 +2,9 @@ package br.com.danferri.luthierflow.controller;
 
 import br.com.danferri.luthierflow.dto.ClienteRequestDTO;
 import br.com.danferri.luthierflow.dto.ClienteResponseDTO;
+import br.com.danferri.luthierflow.dto.InstrumentoResponseDTO;
 import br.com.danferri.luthierflow.service.ClienteService;
+import br.com.danferri.luthierflow.service.InstrumentoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private InstrumentoService instrumentoService;
+
     @GetMapping
     public ResponseEntity<List<ClienteResponseDTO>> listarTodosOsClientes() {
         List<ClienteResponseDTO> clientes = clienteService.listarTodosClientes();
@@ -28,6 +33,12 @@ public class ClienteController {
         return clienteService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{clienteId}/instrumentos")
+    public ResponseEntity<List<InstrumentoResponseDTO>> listarInstrumentosPorCliente(@PathVariable Long clienteId) {
+        List<InstrumentoResponseDTO> instrumentos = instrumentoService.listarPorCliente(clienteId);
+        return ResponseEntity.ok(instrumentos);
     }
 
     @PostMapping
