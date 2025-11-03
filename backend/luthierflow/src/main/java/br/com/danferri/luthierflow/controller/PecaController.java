@@ -1,10 +1,15 @@
 package br.com.danferri.luthierflow.controller;
 
-import br.com.danferri.luthierflow.domain.Peca;
+import br.com.danferri.luthierflow.dto.PecaRequestDTO;
+import br.com.danferri.luthierflow.dto.PecaResponseDTO;
 import br.com.danferri.luthierflow.service.PecaService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -15,36 +20,46 @@ public class PecaController {
     private PecaService pecaService;
 
     @PostMapping
-    public ResponseEntity<Peca> adicionarPeca(@RequestBody Peca peca) {
-        Peca novaPeca = pecaService.salvar(peca);
-        return ResponseEntity.ok(novaPeca);
+    public ResponseEntity<PecaResponseDTO> adicionarPeca(@Valid @RequestBody PecaRequestDTO dto) {
+        PecaResponseDTO novaPeca = pecaService.salvar(dto);
+        // Retorna 201 Created com a localização do novo recurso
+        URI location = URI.create(String.format("/pecas/%s", novaPeca.getId()));
+        return ResponseEntity.created(location).body(novaPeca);
     }
 
     @GetMapping
-    public ResponseEntity<List<Peca>> listarTodasAsPecas() {
-        List<Peca> pecas = pecaService.listarTodas();
+    public ResponseEntity<List<PecaResponseDTO>> listarTodasAsPecas() {
+        List<PecaResponseDTO> pecas = pecaService.listarTodas();
         return ResponseEntity.ok(pecas);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Peca> buscarPecaPorId(@PathVariable Long id) {
-        return pecaService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<PecaResponseDTO> buscarPecaPorId(@PathVariable Long id) {
+        try {
+            PecaResponseDTO peca = pecaService.buscarPorId(id);
+            return ResponseEntity.ok(peca);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Peca> atualizarPeca(@PathVariable Long id, @RequestBody Peca peca) {
-        return pecaService.atualizar(id, peca)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<PecaResponseDTO> atualizarPeca(@PathVariable Long id, @Valid @RequestBody PecaRequestDTO dto) {
+        try {
+            PecaResponseDTO pecaAtualizada = pecaService.atualizar(id, dto);
+            return ResponseEntity.ok(pecaAtualizada);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarPeca(@PathVariable Long id) {
-        if (pecaService.deletar(id)) {
+        try {
+            pecaService.deletar(id);
             return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 }
