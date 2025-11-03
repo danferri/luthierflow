@@ -6,11 +6,13 @@ import { ClienteService, Cliente } from '../../services/cliente.service';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { NgxMaskDirective } from 'ngx-mask';
+import { Instrumento, InstrumentoService } from '../../services/instrumento.service';
+import { InstrumentoFormModalComponent } from '../../pages/instrumento-form-modal/instrumento-form-modal';
 
 @Component({
   selector: 'app-cliente-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgxMaskDirective],
+  imports: [CommonModule, ReactiveFormsModule, NgxMaskDirective, InstrumentoFormModalComponent],
   templateUrl: './cliente-form.html',
   styleUrls: ['./cliente-form.scss']
 })
@@ -19,10 +21,15 @@ export class ClienteFormComponent implements OnInit {
   clienteForm!: FormGroup;
   isEditMode = false;
   clienteId: number | null = null;
+
+  instrumentosDoCliente: Instrumento[] = [];
+  isInstrumentoModalVisible = false;
+  instrumentoIdParaEditar: number | null = null;
   
   constructor(
     private fb: FormBuilder,
     private clienteService: ClienteService,
+    private instrumentoService: InstrumentoService,
     private router: Router,
     private route: ActivatedRoute 
   ) {}
@@ -51,7 +58,8 @@ export class ClienteFormComponent implements OnInit {
         const idParam = params.get('id');
         if (idParam) {
           this.isEditMode = true;
-          this.clienteId = Number(idParam);           
+          this.clienteId = Number(idParam);
+          this.carregarInstrumentos(this.clienteId);           
           return this.clienteService.buscarPorId(this.clienteId);
         } else {          
           this.isEditMode = false;
@@ -70,6 +78,34 @@ export class ClienteFormComponent implements OnInit {
     });
   }
 
+  carregarInstrumentos(clienteId: number): void {
+    this.clienteService.listarInstrumentosPorCliente(clienteId).subscribe({
+      next: (dados) => this.instrumentosDoCliente = dados,
+      error: (err) => console.error("Erro ao carregar instrumentos", err)
+    });
+  }
+
+  abrirModalInstrumento(instrumentoId: number | null = null): void {
+    this.instrumentoIdParaEditar = instrumentoId; // Se for edição, passa o ID
+    this.isInstrumentoModalVisible = true;
+  }
+
+  aoFecharModal(salvou: boolean): void {
+    this.isInstrumentoModalVisible = false;
+    // Se o modal foi fechado com "salvar", recarrega a lista
+    if (salvou && this.clienteId) {
+      this.carregarInstrumentos(this.clienteId);
+    }
+  }
+
+  excluirInstrumento(instrumento: Instrumento): void {
+    if (window.confirm(`Deseja arquivar o instrumento ${instrumento.marca} ${instrumento.modelo}?`)) {
+      this.instrumentoService.deletar(instrumento.id).subscribe({
+        next: () => this.carregarInstrumentos(this.clienteId!),
+        error: (err) => alert('Erro ao arquivar instrumento.')
+      });
+    }
+  }
 
   onSubmit(): void {
     this.clienteForm.markAllAsTouched();

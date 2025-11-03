@@ -1,6 +1,6 @@
 <div class="form-container">
-  <h2>Novo Cliente</h2>
-  <p>Preencha os dados abaixo para cadastrar um novo cliente.</p>
+  <h2>{{ isEditMode ? 'Editar Cliente' : 'Novo Cliente' }}</h2>
+  <p>{{ isEditMode ? 'Atualize os dados do cliente e gerencie seus instrumentos.' : 'Preencha os dados abaixo para cadastrar um novo cliente.' }}</p>
 
   <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
 
@@ -44,9 +44,7 @@
         </div>
 
       </div>
-    </div>
-
-    <div class="card form-section">
+    </div> <div class="card form-section">
       <h3>Endereço (Opcional)</h3>
       <div class="form-grid address-grid">
         <div class="form-field">
@@ -69,12 +67,54 @@
           <input type="text" id="estado" formControlName="estado" maxlength="2">
         </div>
       </div>
-    </div>
+    </div> <div *ngIf="isEditMode" class="card form-section">
+      <div class="section-header">
+        <h3>Instrumentos Cadastrados</h3>
+        <button type="button" class="btn-add-instrumento" (click)="abrirModalInstrumento()">+ Add Instrumento</button>
+      </div>
 
-    <div class="form-actions">
+      <table *ngIf="instrumentosDoCliente.length > 0; else semInstrumentos" class="data-table">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>N/S</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inst of instrumentosDoCliente">
+            <td>{{ inst.tipo }}</td>
+            <td>{{ inst.marca }}</td>
+            <td>{{ inst.modelo }}</td>
+            <td>{{ inst.numeroSerie || '-' }}</td>
+            <td>
+              <button type="button" class="btn-icon btn-edit" (click)="abrirModalInstrumento(inst.id)">✏️</button>
+              <button type="button" class="btn-icon btn-delete" (click)="excluirInstrumento(inst)">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #semInstrumentos>
+        <p class="empty-message-local">Nenhum instrumento cadastrado para este cliente.</p>
+      </ng-template>
+
+    </div> <div class="form-actions">
       <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
-      <button type="submit" class="btn btn-primary" [disabled]="clienteForm.invalid">Salvar Cliente</button>
+      <button type="submit" class="btn btn-primary" [disabled]="clienteForm.invalid">
+        {{ isEditMode ? 'Salvar Alterações do Cliente' : 'Salvar Cliente' }}
+      </button>
     </div>
 
   </form>
 </div>
+
+
+<app-instrumento-form-modal
+  *ngIf="isInstrumentoModalVisible && clienteId"
+  [clienteId]="clienteId"
+  [instrumentoIdParaEditar]="instrumentoIdParaEditar"
+  (fechar)="aoFecharModal($event)">
+</app-instrumento-form-modal>

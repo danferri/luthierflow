@@ -127,3 +127,79 @@ input[type="tel"] {
     background-color: #5a6268;
   }
 }
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eef2f6;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+}
+
+.btn-add-instrumento {
+  background-color: #007bff; // Um azul diferente para diferenciar
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+/* Tabela de dados (copiado de cliente-list.scss mas com nome genérico) */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #eef2f6;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+    color: #495057;
+    font-size: 0.9rem;
+  }
+
+  td {
+    color: #6c757d;
+    font-size: 0.95rem;
+  }
+  
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+/* Botões de ícone (copiado de cliente-list.scss) */
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  margin-right: 8px;
+  padding: 5px;
+}
+.btn-edit { color: #3f51b5; }
+.btn-delete { color: #dc3545; }
+
+.empty-message-local {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+}

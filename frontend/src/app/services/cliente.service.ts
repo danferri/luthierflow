@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Instrumento } from './instrumento.service';
 
 export interface Cliente {
   id: number;
@@ -45,5 +46,11 @@ export class ClienteService {
   deletar(id: number): Observable<void> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<void>(url);
-  }  
+  }
+  
+  listarInstrumentosPorCliente(clienteId: number): Observable<Instrumento[]> {    
+    const url = `${this.apiUrl}/${clienteId}/instrumentos`;
+    return this.http.get<Instrumento[]>(url);
+  }
+
 }
