@@ -21,7 +21,7 @@ public class OrdemServicoDTO {
     private String diagnosticoServico;
     private BigDecimal valorMaoDeObra;
     private ClienteResponseDTO cliente;
-    private InstrumentoDTO instrumento;
+    private InstrumentoResponseDTO instrumento;
     private Set<ItemServicoDTO> itens;
 
     public OrdemServicoDTO(OrdemDeServico os) {
@@ -35,7 +35,7 @@ public class OrdemServicoDTO {
         this.valorMaoDeObra = os.getValorMaoDeObra();
         this.cliente = new ClienteResponseDTO(os.getCliente());
         if (os.getInstrumento() != null) {
-            this.instrumento = new InstrumentoDTO(os.getInstrumento());
+            this.instrumento = new InstrumentoResponseDTO(os.getInstrumento());
         }
         this.itens = os.getItens().stream()
                 .map(ItemServicoDTO::new)
