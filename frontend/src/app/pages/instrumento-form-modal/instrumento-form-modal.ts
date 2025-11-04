@@ -10,15 +10,11 @@ import { Instrumento, InstrumentoRequest, InstrumentoService } from '../../servi
   templateUrl: './instrumento-form-modal.html',
   styleUrls: ['./instrumento-form-modal.scss']
 })
-export class InstrumentoFormModalComponent implements OnInit {
-
-  // ENTRADA: Recebe o ID do cliente do componente pai
-  @Input() clienteId!: number;
+export class InstrumentoFormModalComponent implements OnInit {  
+  @Input() clienteId!: number;  
   
-  // ENTRADA: Se receber um ID, entra em modo de edição
   @Input() instrumentoIdParaEditar: number | null = null; 
-
-  // SAÍDA: Avisa o componente pai que algo foi salvo (para fechar e recarregar a lista)
+  
   @Output() fechar = new EventEmitter<boolean>();
 
   instrumentoForm!: FormGroup;
@@ -31,10 +27,9 @@ export class InstrumentoFormModalComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
     
-    // Se recebeu um ID para editar...
     if (this.instrumentoIdParaEditar) {
       this.instrumentoService.buscarPorId(this.instrumentoIdParaEditar).subscribe(instrumento => {
-        // Preenche o formulário com os dados do instrumento
+        
         this.instrumentoForm.patchValue(instrumento);
       });
     }
@@ -57,25 +52,23 @@ export class InstrumentoFormModalComponent implements OnInit {
     
     const instrumentoData: InstrumentoRequest = {
       ...formValues,
-      idCliente: this.clienteId // Associa o ID do cliente recebido via @Input
+      idCliente: this.clienteId
     };
 
-    if (this.instrumentoIdParaEditar) {
-      // Lógica de ATUALIZAR
+    if (this.instrumentoIdParaEditar) {      
       this.instrumentoService.atualizar(this.instrumentoIdParaEditar, instrumentoData).subscribe({
-        next: () => this.fechar.emit(true), // Emite evento de sucesso
+        next: () => this.fechar.emit(true), 
         error: (err) => alert('Erro ao atualizar instrumento.')
       });
-    } else {
-      // Lógica de SALVAR
+    } else {      
       this.instrumentoService.salvar(instrumentoData).subscribe({
-        next: () => this.fechar.emit(true), // Emite evento de sucesso
+        next: () => this.fechar.emit(true),
         error: (err) => alert('Erro ao salvar instrumento.')
       });
     }
   }
 
   onCancel(): void {
-    this.fechar.emit(false); // Emite evento de "cancelar"
+    this.fechar.emit(false);
   }
 }

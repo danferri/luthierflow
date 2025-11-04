@@ -1,45 +1,40 @@
-/* Estilo para o backdrop escuro */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro semi-transparente */
+  background-color: rgba(0, 0, 0, 0.6); 
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
 }
 
-/* O card do modal, seguindo o padrão .card do cliente-form.scss */
 .modal-content {
   background-color: white;
   border-radius: 8px;
   padding: 24px 30px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 600px; /* Largura do modal */
+  max-width: 600px;
   z-index: 101;
 }
 
-/* Título do Modal */
 .modal-content h3 {
   margin-top: 0;
   margin-bottom: 20px;
-  font-size: 1.5rem; /* Título "Adicionar Novo Instrumento" */
+  font-size: 1.5rem;
   font-weight: 500;
   color: #333;
 }
 
-/* Grid para os campos do formulário */
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Duas colunas */
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
-/* Padrões de formulário copiados de cliente-form.scss */
 .form-field {
   display: flex;
   flex-direction: column;
@@ -77,7 +72,6 @@ select {
   small { color: #dc3545; font-size: 0.8rem; }
 }
 
-/* Botões de ação do modal (Salvar, Cancelar) */
 .modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -85,7 +79,6 @@ select {
   margin-top: 30px;
 }
 
-/* Padrões de botão copiados de cliente-form.scss */
 .btn {
   border: none;
   padding: 10px 25px;

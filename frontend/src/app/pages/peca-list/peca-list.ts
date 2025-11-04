@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common'; // Importa CurrencyPipe
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Peca, PecaService } from '../../services/peca.service';
-import { PecaFormModalComponent } from '../peca-form-modal/peca-form-modal'; // Importa o Modal
+import { PecaFormModalComponent } from '../peca-form-modal/peca-form-modal';
 
 @Component({
-  selector: 'app-peca-list', // Nome do seletor
-  standalone: true,
-  // Adiciona o Modal e o CurrencyPipe aos imports
+  selector: 'app-peca-list',
+  standalone: true,  
   imports: [CommonModule, PecaFormModalComponent, CurrencyPipe],
   templateUrl: './peca-list.html',
   styleUrls: ['./peca-list.scss']
@@ -16,7 +15,6 @@ export class PecaListComponent implements OnInit {
 
   pecas: Peca[] = [];
   
-  // Variáveis de estado para controlar o modal
   isPecaModalVisible = false;
   pecaIdParaEditar: number | null = null;
   
@@ -55,23 +53,14 @@ export class PecaListComponent implements OnInit {
       });
     }
   }
-
-  // --- Métodos de Controle do Modal ---
-
-  /**
-   * Abre o modal. Se um ID for passado, é para edição.
-   */
+  
   abrirModalPeca(pecaId: number | null = null): void {
     this.pecaIdParaEditar = pecaId;
     this.isPecaModalVisible = true;
   }
 
-  /**
-   * Chamado pelo (fechar) do modal
-   */
   aoFecharModal(salvou: boolean): void {
-    this.isPecaModalVisible = false;
-    // Se o modal foi fechado com "salvar", recarrega a lista
+    this.isPecaModalVisible = false;    
     if (salvou) {
       this.buscarPecas();
     }
