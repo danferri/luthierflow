@@ -86,13 +86,13 @@ export class ClienteFormComponent implements OnInit {
   }
 
   abrirModalInstrumento(instrumentoId: number | null = null): void {
-    this.instrumentoIdParaEditar = instrumentoId; // Se for edição, passa o ID
+    this.instrumentoIdParaEditar = instrumentoId;
     this.isInstrumentoModalVisible = true;
   }
 
   aoFecharModal(salvou: boolean): void {
     this.isInstrumentoModalVisible = false;
-    // Se o modal foi fechado com "salvar", recarrega a lista
+    
     if (salvou && this.clienteId) {
       this.carregarInstrumentos(this.clienteId);
     }
