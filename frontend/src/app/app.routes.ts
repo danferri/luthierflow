@@ -43,6 +43,10 @@ export const routes: Routes = [
       {        
         path: 'clientes/editar/:id',
         loadComponent: () => import('./pages/cliente-form/cliente-form').then(m => m.ClienteFormComponent)
+      },
+      {
+        path: 'pecas',
+        loadComponent: () => import('./pages/peca-list/peca-list').then(m => m.PecaListComponent)
       },      
       {
         path: '',

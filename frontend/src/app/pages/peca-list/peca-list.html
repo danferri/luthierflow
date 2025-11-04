@@ -1,0 +1,44 @@
+<div class="list-container">
+  <div class="list-header">
+    <h2>Estoque de Peças</h2>
+    <button class="btn-add" (click)="abrirModalPeca()">+ Nova Peça</button> 
+  </div>
+
+  <table *ngIf="pecas.length > 0; else semPecas" class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome da Peça</th>
+        <th>Fabricante</th>
+        <th>Modelo</th>
+        <th>Qtd.</th>
+        <th>Preço</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let peca of pecas">
+        <td>{{ peca.id }}</td>
+        <td>{{ peca.nomePeca }}</td>
+        <td>{{ peca.fabricante || '-' }}</td>
+        <td>{{ peca.modelo || '-' }}</td>
+        <td>{{ peca.qtdEstoque }}</td>
+        <td>{{ peca.precoVenda | currency:'BRL' }}</td>
+        <td>
+          <button class="btn-icon btn-edit" (click)="abrirModalPeca(peca.id)">✏️</button>
+          <button class="btn-icon btn-delete" (click)="excluirPeca(peca)">🗑️</button> 
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #semPecas>
+    <p class="empty-message">Nenhuma peça cadastrada no estoque.</p>
+  </ng-template>
+</div>
+
+<app-peca-form-modal
+  *ngIf="isPecaModalVisible"
+  [pecaIdParaEditar]="pecaIdParaEditar"
+  (fechar)="aoFecharModal($event)">
+</app-peca-form-modal>

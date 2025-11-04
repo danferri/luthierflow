@@ -1,0 +1,56 @@
+<div class="modal-backdrop" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    
+    <h3>{{ (pecaIdParaEditar ? 'Editar' : 'Cadastro de') + ' Peça' }}</h3>
+    
+    <form [formGroup]="pecaForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+
+        <div class="form-field">
+          <label for="nomePeca">Nome da Peça *</label>
+          <input type="text" id="nomePeca" formControlName="nomePeca">
+          <div *ngIf="pecaForm.controls['nomePeca'].invalid && (pecaForm.controls['nomePeca'].dirty || pecaForm.controls['nomePeca'].touched)" class="error-message">
+            <small *ngIf="pecaForm.controls['nomePeca'].errors?.['required']">Obrigatório.</small>
+          </div>
+        </div>
+        
+        <div class="form-field">
+          <label for="fabricante">Fabricante</label>
+          <input type="text" id="fabricante" formControlName="fabricante">
+        </div>
+
+        <div class="form-field">
+          <label for="modelo">Modelo</label>
+          <input type="text" id="modelo" formControlName="modelo">
+        </div>
+        
+        <div class="form-field">
+          <label for="qtdEstoque">Quantidade *</label>
+          <input type="number" id="qtdEstoque" formControlName="qtdEstoque">
+           <div *ngIf="pecaForm.controls['qtdEstoque'].invalid && (pecaForm.controls['qtdEstoque'].dirty || pecaForm.controls['qtdEstoque'].touched)" class="error-message">
+            <small *ngIf="pecaForm.controls['qtdEstoque'].errors?.['required']">Obrigatório.</small>
+            <small *ngIf="pecaForm.controls['qtdEstoque'].errors?.['min']">Mínimo 0.</small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="precoVenda">Preço de Venda *</label>
+          <input type="number" id="precoVenda" formControlName="precoVenda" placeholder="R$">
+           <div *ngIf="pecaForm.controls['precoVenda'].invalid && (pecaForm.controls['precoVenda'].dirty || pecaForm.controls['precoVenda'].touched)" class="error-message">
+            <small *ngIf="pecaForm.controls['precoVenda'].errors?.['required']">Obrigatório.</small>
+            <small *ngIf="pecaForm.controls['precoVenda'].errors?.['min']">Deve ser > 0.</small>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="pecaForm.invalid">
+          {{ pecaIdParaEditar ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
