@@ -2,11 +2,14 @@ package br.com.danferri.luthierflow.service;
 
 import br.com.danferri.luthierflow.domain.*;
 import br.com.danferri.luthierflow.domain.enums.StatusOS;
+// Importa os novos DTOs
+import br.com.danferri.luthierflow.dto.OrdemServicoCreateRequestDTO;
+import br.com.danferri.luthierflow.dto.OrdemServicoUpdateRequestDTO;
 import br.com.danferri.luthierflow.repository.ClienteRepository;
 import br.com.danferri.luthierflow.repository.InstrumentoRepository;
 import br.com.danferri.luthierflow.repository.OrdemServicoRepository;
-
 import br.com.danferri.luthierflow.repository.PecaRepository;
+import jakarta.persistence.EntityNotFoundException; // Import correto
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,52 +32,59 @@ public class OrdemServicoService {
     @Autowired
     private PecaRepository pecaRepository;
 
+    @Transactional
     public List<OrdemDeServico> listarTodas() {
         return ordemServicoRepository.findAll();
     }
 
+    @Transactional
     public Optional<OrdemDeServico> buscarPorId(Long id) {
         return ordemServicoRepository.findById(id);
     }
 
-    public OrdemDeServico salvar(OrdemDeServico os, Long clienteId, Long instrumentoId) {
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado com o ID: " + clienteId));
+    @Transactional
+    public OrdemDeServico salvar(OrdemServicoCreateRequestDTO dto) {
+        Cliente cliente = clienteRepository.findById(dto.getClienteId())
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado com o ID: " + dto.getClienteId()));
 
         Instrumento instrumento = null;
-        if (instrumentoId != null) {
-            instrumento = instrumentoRepository.findById(instrumentoId)
-                    .filter(i -> i.getCliente().getId().equals(clienteId))
+        if (dto.getInstrumentoId() != null) {
+            instrumento = instrumentoRepository.findById(dto.getInstrumentoId())
+                    .filter(i -> i.getCliente().getId().equals(dto.getClienteId()))
                     .orElseThrow(() -> new IllegalArgumentException("Instrumento não encontrado ou não pertence ao cliente informado."));
         }
 
+        OrdemDeServico os = new OrdemDeServico();
         os.setCliente(cliente);
         os.setInstrumento(instrumento);
+        os.setTipoServico(dto.getTipoServico());
+        os.setDescricaoProblema(dto.getDescricaoProblema());
         os.setDataEntrada(LocalDate.now());
         os.setStatus(StatusOS.ORCAMENTO);
 
         return ordemServicoRepository.save(os);
     }
 
-    public Optional<OrdemDeServico> atualizar(Long id, OrdemDeServico osAtualizada) {
+    @Transactional
+    public Optional<OrdemDeServico> atualizar(Long id, OrdemServicoUpdateRequestDTO dto) {
         return ordemServicoRepository.findById(id)
                 .map(osExistente -> {
-                    if (osAtualizada.getTipoServico() != null) {
-                        osExistente.setTipoServico(osAtualizada.getTipoServico());
+                    // Lógica de atualização parcial
+                    if (dto.getTipoServico() != null) {
+                        osExistente.setTipoServico(dto.getTipoServico());
                     }
-                    if (osAtualizada.getDescricaoProblema() != null) {
-                        osExistente.setDescricaoProblema(osAtualizada.getDescricaoProblema());
+                    if (dto.getDescricaoProblema() != null) {
+                        osExistente.setDescricaoProblema(dto.getDescricaoProblema());
                     }
-                    if (osAtualizada.getDiagnosticoServico() != null) {
-                        osExistente.setDiagnosticoServico(osAtualizada.getDiagnosticoServico());
+                    if (dto.getDiagnosticoServico() != null) {
+                        osExistente.setDiagnosticoServico(dto.getDiagnosticoServico());
                     }
-                    if (osAtualizada.getValorMaoDeObra() != null) {
-                        osExistente.setValorMaoDeObra(osAtualizada.getValorMaoDeObra());
+                    if (dto.getValorMaoDeObra() != null) {
+                        osExistente.setValorMaoDeObra(dto.getValorMaoDeObra());
                     }
-                    if (osAtualizada.getStatus() != null) {
-                        osExistente.setStatus(osAtualizada.getStatus());
-
-                        if (osAtualizada.getStatus() == StatusOS.FINALIZADO) {
+                    if (dto.getStatus() != null) {
+                        osExistente.setStatus(dto.getStatus());
+                        if (dto.getStatus() == StatusOS.FINALIZADO) {
                             osExistente.setDataFinalizacao(LocalDate.now());
                         }
                     }
@@ -97,10 +107,10 @@ public class OrdemServicoService {
         }
 
         OrdemDeServico os = ordemServicoRepository.findById(osId)
-                .orElseThrow(() -> new IllegalArgumentException("Ordem de Serviço não encontrada."));
+                .orElseThrow(() -> new EntityNotFoundException("Ordem de Serviço não encontrada."));
 
         Peca peca = pecaRepository.findById(pecaId)
-                .orElseThrow(() -> new IllegalArgumentException("Peça não encontrada."));
+                .orElseThrow(() -> new EntityNotFoundException("Peça não encontrada."));
 
         if (peca.getQtdEstoque() < quantidade) {
             throw new IllegalStateException("Estoque insuficiente para a peça: " + peca.getNomePeca());
@@ -123,7 +133,7 @@ public class OrdemServicoService {
     @Transactional
     public OrdemDeServico removerPeca(Long osId, Long pecaId) {
         OrdemDeServico os = ordemServicoRepository.findById(osId)
-                .orElseThrow(() -> new IllegalArgumentException("Ordem de Serviço não encontrada."));
+                .orElseThrow(() -> new EntityNotFoundException("Ordem de Serviço não encontrada."));
 
         ItemServico itemParaRemover = os.getItens().stream()
                 .filter(item -> item.getPeca().getId().equals(pecaId))
@@ -141,5 +151,3 @@ public class OrdemServicoService {
         return ordemServicoRepository.save(os);
     }
 }
-
-

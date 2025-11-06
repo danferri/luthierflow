@@ -15,7 +15,7 @@ public class ProjetoPortfolioDTO {
     private String descricaoPublica;
     private String statusPublicacao;
     private LocalDate dataPublicacao;
-    private OrdemServicoDTO ordemDeServico;
+    private OrdemServicoResponseDTO ordemDeServico;
     private List<FotoPortfolioDTO> fotos;
 
     public ProjetoPortfolioDTO(ProjetoPortfolio projeto) {
@@ -24,7 +24,7 @@ public class ProjetoPortfolioDTO {
         this.descricaoPublica = projeto.getDescricaoPublica();
         this.statusPublicacao = projeto.getStatusPublicacao();
         this.dataPublicacao = projeto.getDataPublicacao();
-        this.ordemDeServico = new OrdemServicoDTO(projeto.getOrdemDeServico());
+        this.ordemDeServico = new OrdemServicoResponseDTO(projeto.getOrdemDeServico());
         this.fotos = projeto.getFotos().stream()
                 .map(FotoPortfolioDTO::new)
                 .collect(Collectors.toList());

@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
-public class OrdemServicoDTO {
+public class OrdemServicoResponseDTO {
 
     private Long id;
     private String tipoServico;
@@ -24,7 +24,7 @@ public class OrdemServicoDTO {
     private InstrumentoResponseDTO instrumento;
     private Set<ItemServicoDTO> itens;
 
-    public OrdemServicoDTO(OrdemDeServico os) {
+    public OrdemServicoResponseDTO(OrdemDeServico os) {
         this.id = os.getId();
         this.tipoServico = os.getTipoServico();
         this.dataEntrada = os.getDataEntrada();
