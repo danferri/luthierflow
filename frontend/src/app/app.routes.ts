@@ -49,6 +49,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/peca-list/peca-list').then(m => m.PecaListComponent)
       },      
       {
+        path: 'ordens-servico',
+        loadComponent: () => import('./pages/os-list/os-list').then(m => m.OsListComponent)
+      },
+      {
+        path: 'ordens-servico/:id',
+        loadComponent: () => import('./pages/os-detail/os-detail').then(m => m.OsDetailComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
