@@ -1,5 +1,4 @@
 <div class="list-container">
-  
   <div class="list-header">
     <h2>Ordens de Serviço</h2>
     <button class="btn-add" (click)="abrirModalOS()">+ Nova O.S.</button> 
@@ -10,20 +9,20 @@
     <div class="kanban-column">
       <h3 class="kanban-column-title">Orçamentos para Aprovar</h3>
       <div class="kanban-cards">
+        
         <div *ngFor="let os of ordensOrcamento" 
              class="os-card"
              [routerLink]="['/ordens-servico', os.id]">
           
           <div class="os-card-id">#{{ os.id }}</div>
           <div class="os-card-cliente">{{ os.cliente.nome }}</div>
-          
-          <div class="os-card-details">
-            {{ os.instrumento?.marca }} {{ os.instrumento?.modelo || 'N/A' }}<br>
-            <span>{{ os.tipoServico }}</span>
-          </div>
-
+          <div class="os-card-instrumento">{{ os.instrumento?.marca }} {{ os.instrumento?.modelo || 'N/A' }}</div>
+          <div class="os-card-servico">{{ os.tipoServico }}</div>
         </div>
-        <p *ngIf="ordensOrcamento.length === 0" class="empty-message">Nenhuma O.S.</p>
+        
+        @if (ordensOrcamento.length === 0) {
+          <p class="empty-message">Nenhuma O.S.</p>
+        }
       </div>
     </div>
 
@@ -36,13 +35,13 @@
           
           <div class="os-card-id">#{{ os.id }}</div>
           <div class="os-card-cliente">{{ os.cliente.nome }}</div>
-          <div class="os-card-details">
-            {{ os.instrumento?.marca }} {{ os.instrumento?.modelo || 'N/A' }}<br>
-            <span>{{ os.tipoServico }}</span>
-          </div>
-
+          <div class="os-card-instrumento">{{ os.instrumento?.marca }} {{ os.instrumento?.modelo || 'N/A' }}</div>
+          <div class="os-card-servico">{{ os.tipoServico }}</div>
         </div>
-        <p *ngIf="ordensEmAndamento.length === 0" class="empty-message">Nenhuma O.S.</p>
+        
+        @if (ordensEmAndamento.length === 0) {
+          <p class="empty-message">Nenhuma O.S.</p>
+        }
       </div>
     </div>
 
@@ -55,13 +54,13 @@
           
           <div class="os-card-id">#{{ os.id }}</div>
           <div class="os-card-cliente">{{ os.cliente.nome }}</div>
-          <div class="os-card-details">
-            {{ os.instrumento?.marca }} {{ os.instrumento?.modelo || 'N/A' }}<br>
-            <span>{{ os.tipoServico }}</span>
-          </div>
-
+          <div class="os-card-instrumento">{{ os.instrumento?.marca }} {{ os.instrumento?.modelo || 'N/A' }}</div>
+          <div class="os-card-servico">{{ os.tipoServico }}</div>
         </div>
-        <p *ngIf="ordensAguardandoPecas.length === 0" class="empty-message">Nenhuma O.S.</p>
+        
+        @if (ordensAguardandoPecas.length === 0) {
+          <p class="empty-message">Nenhuma O.S.</p>
+        }
       </div>
     </div>
 
@@ -74,20 +73,19 @@
           
           <div class="os-card-id">#{{ os.id }}</div>
           <div class="os-card-cliente">{{ os.cliente.nome }}</div>
-          <div class="os-card-details">
-            {{ os.instrumento?.marca }} {{ os.instrumento?.modelo || 'N/A' }}<br>
-            <span>{{ os.tipoServico }}</span>
-          </div>
-
+          <div class="os-card-instrumento">{{ os.instrumento?.marca }} {{ os.instrumento?.modelo || 'N/A' }}</div>
+          <div class="os-card-servico">{{ os.tipoServico }}</div>
         </div>
-        <p *ngIf="ordensFinalizadas.length === 0" class="empty-message">Nenhuma O.S.</p>
+        
+        @if (ordensFinalizadas.length === 0) {
+          <p class="empty-message">Nenhuma O.S.</p>
+        }
       </div>
     </div>
 
   </div>
 </div>
 
-<app-os-form-modal
-  *ngIf="isModalVisible"
-  (fechar)="aoFecharModal($event)">
-</app-os-form-modal>
+@if (isModalVisible) {
+  <app-os-form-modal (fechar)="aoFecharModal($event)"></app-os-form-modal>
+}
