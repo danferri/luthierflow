@@ -1,22 +1,19 @@
-/* 1. Imports */
 @use '@angular/material' as mat;
 @import '@aws-amplify/ui/styles.css';
 
-/* 2. Reset Global (Corrige a barra horizontal) */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* 3. CORREÇÃO DE LAYOUT PRINCIPAL */
 html, body {
   width: 100%;
-  height: 100%; /* Força a página a ter 100% de altura */
+  height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* <-- IMPORTANTE: Impede o BODY de rolar */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-/* 4. Tema do Material (Seu código original) */
 html {
   @include mat.theme((
     color: (
@@ -28,7 +25,6 @@ html {
   ));
 }
 
-/* 5. Estilos do Body (Seu código original) */
 body {
   background-color: #f4f7fa; 
   font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -36,7 +32,6 @@ body {
   color-scheme: light;
 }
 
-/* 6. CORREÇÃO DE LAYOUT: Garante que o app-root ocupe todo o espaço */
 app-root {
   height: 100%;
   display: block;

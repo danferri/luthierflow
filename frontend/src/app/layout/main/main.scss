@@ -1,4 +1,3 @@
-/* :host força o componente a ter 100% da altura do app-root */
 :host {
   display: block;
   height: 100%; 
@@ -6,10 +5,9 @@
 
 .main-container {
   display: flex;
-  height: 100%; /* Ocupa os 100% do :host */
+  height: 100%;
 }
 
-/* O Sidebar agora é um container flex que gerencia seus filhos */
 .sidebar {
   width: 240px;
   background-color: #3f51b5;
@@ -17,22 +15,21 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  height: 100%; /* Garante que o sidebar tenha 100% de altura */
-  overflow: hidden; /* Impede o sidebar de rolar */
-  flex-shrink: 0; /* Impede o sidebar de encolher */
+  height: 100%; 
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .logo {
   font-size: 1.5rem;
   text-align: center;
   margin-bottom: 40px;
-  flex-shrink: 0; /* Impede o logo de encolher */
+  flex-shrink: 0;
 }
 
-/* O container da lista de links */
 .main-nav {
-  flex-grow: 1; /* Faz esta área crescer e preencher o espaço */
-  overflow-y: auto; /* FAZ APENAS OS LINKS ROLAREM se a tela for pequena */
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .main-nav ul {
@@ -55,35 +52,32 @@
   }
 }
 
-/* A área de conteúdo principal (direita) */
 .content-area {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   background-color: #f4f7fa;
   height: 100%;
-  overflow: hidden; /* Impede esta área de rolar */
+  overflow: hidden;
 }
 
 .top-header {
   height: 60px;
   background-color: white;
   border-bottom: 1px solid #eef2f6;
-  flex-shrink: 0; /* Impede o header de encolher */
+  flex-shrink: 0;
 }
 
-/* A área rolável onde o <router-outlet> vive */
 .page-content {
   flex-grow: 1;
-  overflow-y: auto; /* APENAS esta área rola verticalmente */
-  overflow-x: auto; /* APENAS esta área rola horizontalmente (para o Kanban) */
-  padding: 20px 40px; /* O padding global fica aqui */
+  overflow-y: auto; 
+  overflow-x: auto;
+  padding: 20px 40px;
 }
 
-/* O botão de Logout */
 .logout-section {
   margin-top: auto;
-  flex-shrink: 0; /* Impede o logout de encolher */
+  flex-shrink: 0;
 
   a {
     cursor: pointer;
