@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class ProjetoPortfolioDTO {
+public class ProjetoPortfolioResponseDTO {
 
     private Long id;
     private String tituloPublico;
@@ -18,7 +18,7 @@ public class ProjetoPortfolioDTO {
     private OrdemServicoResponseDTO ordemDeServico;
     private List<FotoPortfolioDTO> fotos;
 
-    public ProjetoPortfolioDTO(ProjetoPortfolio projeto) {
+    public ProjetoPortfolioResponseDTO(ProjetoPortfolio projeto) {
         this.id = projeto.getId();
         this.tituloPublico = projeto.getTituloPublico();
         this.descricaoPublica = projeto.getDescricaoPublica();

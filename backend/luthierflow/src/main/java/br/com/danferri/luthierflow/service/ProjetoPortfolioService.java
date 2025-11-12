@@ -4,8 +4,10 @@ import br.com.danferri.luthierflow.domain.FotoPortfolio;
 import br.com.danferri.luthierflow.domain.OrdemDeServico;
 import br.com.danferri.luthierflow.domain.ProjetoPortfolio;
 import br.com.danferri.luthierflow.domain.enums.StatusOS;
+import br.com.danferri.luthierflow.dto.ProjetoPortfolioUpdateRequestDTO;
 import br.com.danferri.luthierflow.repository.OrdemServicoRepository;
 import br.com.danferri.luthierflow.repository.ProjetoPortfolioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,39 +41,43 @@ public class ProjetoPortfolioService {
     public ProjetoPortfolio promoverParaPortfolio(Long ordemDeServicoId) {
 
         if (projetoPortfolioRepository.findByOrdemDeServicoId(ordemDeServicoId).isPresent()) {
-            throw new IllegalStateException("Esta Ordem de Serviço já foi adicionada ao portfólio.");        }
-
+            throw new IllegalStateException("Esta Ordem de Serviço já foi adicionada ao portfólio.");
+        }
 
         OrdemDeServico os = ordemServicoRepository.findById(ordemDeServicoId)
                 .orElseThrow(() -> new IllegalArgumentException("Ordem de Serviço não encontrada."));
 
         if (os.getStatus() != StatusOS.FINALIZADO) {
-            throw new IllegalStateException("Apenas Ordens de Serviço com status FINALIZADO podem ser adicionadas ao portfólio.");        }
-
+            throw new IllegalStateException("Apenas Ordens de Serviço com status FINALIZADO podem ser adicionadas ao portfólio.");
+        }
 
         ProjetoPortfolio novoProjeto = new ProjetoPortfolio();
         novoProjeto.setOrdemDeServico(os);
-        novoProjeto.setTituloPublico("Novo Projeto - " + os.getTipoServico() + " em " + os.getInstrumento().getMarca());
+
+        String titulo = os.getTipoServico() + " em " + os.getInstrumento().getMarca() + " " + os.getInstrumento().getModelo();
+        novoProjeto.setTituloPublico(titulo);
+
         novoProjeto.setDescricaoPublica("Descrição do trabalho realizado...");
-        novoProjeto.setStatusPublicacao("RASCUNHO");
+        novoProjeto.setStatusPublicacao("RASCUNHO"); // Status inicial Rascunho
 
         return projetoPortfolioRepository.save(novoProjeto);
     }
 
     @Transactional
-    public Optional<ProjetoPortfolio> atualizar(Long id, ProjetoPortfolio projetoAtualizado) {
+    public Optional<ProjetoPortfolio> atualizar(Long id, ProjetoPortfolioUpdateRequestDTO dto) {
         return projetoPortfolioRepository.findById(id)
                 .map(projetoExistente -> {
-                    if (projetoAtualizado.getTituloPublico() != null) {
-                        projetoExistente.setTituloPublico(projetoAtualizado.getTituloPublico());
+
+                    if (dto.getTituloPublico() != null) {
+                        projetoExistente.setTituloPublico(dto.getTituloPublico());
                     }
 
-                    if (projetoAtualizado.getDescricaoPublica() != null) {
-                        projetoExistente.setDescricaoPublica(projetoAtualizado.getDescricaoPublica());
+                    if (dto.getDescricaoPublica() != null) {
+                        projetoExistente.setDescricaoPublica(dto.getDescricaoPublica());
                     }
 
-                    if (projetoAtualizado.getStatusPublicacao() != null) {
-                        String novoStatus = projetoAtualizado.getStatusPublicacao();
+                    if (dto.getStatusPublicacao() != null) {
+                        String novoStatus = dto.getStatusPublicacao();
 
                         if ("PUBLICADO".equalsIgnoreCase(novoStatus) && !"PUBLICADO".equalsIgnoreCase(projetoExistente.getStatusPublicacao())) {
                             projetoExistente.setDataPublicacao(LocalDate.now());
@@ -87,7 +93,7 @@ public class ProjetoPortfolioService {
     public ProjetoPortfolio adicionarFoto(Long portfolioId, MultipartFile file, String legenda, Integer ordemExibicao) {
 
         ProjetoPortfolio projeto = projetoPortfolioRepository.findById(portfolioId)
-                .orElseThrow(() -> new IllegalArgumentException("Projeto de Portfólio não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Projeto de Portfólio não encontrado."));
 
         String nomeArquivo = fileStorageService.storeFile(file);
 

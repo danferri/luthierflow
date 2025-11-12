@@ -1,8 +1,10 @@
 package br.com.danferri.luthierflow.controller;
 
 import br.com.danferri.luthierflow.domain.ProjetoPortfolio;
-import br.com.danferri.luthierflow.dto.ProjetoPortfolioDTO;
+import br.com.danferri.luthierflow.dto.ProjetoPortfolioResponseDTO;
+import br.com.danferri.luthierflow.dto.ProjetoPortfolioUpdateRequestDTO;
 import br.com.danferri.luthierflow.service.ProjetoPortfolioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,56 +21,59 @@ public class ProjetoPortfolioController {
     private ProjetoPortfolioService projetoPortfolioService;
 
     @GetMapping
-    public ResponseEntity<List<ProjetoPortfolioDTO>> listarTodosOsProjetos() {
-        List<ProjetoPortfolioDTO> projetos = projetoPortfolioService.listarTodos().stream()
-                .map(ProjetoPortfolioDTO::new)
+    public ResponseEntity<List<ProjetoPortfolioResponseDTO>> listarTodosOsProjetos() {
+        List<ProjetoPortfolioResponseDTO> projetos = projetoPortfolioService.listarTodos().stream()
+                .map(ProjetoPortfolioResponseDTO::new)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(projetos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjetoPortfolioDTO> buscarProjetoPorId(@PathVariable Long id) {
+    public ResponseEntity<ProjetoPortfolioResponseDTO> buscarProjetoPorId(@PathVariable Long id) {
         return projetoPortfolioService.buscarPorId(id)
-                .map(projeto -> ResponseEntity.ok(new ProjetoPortfolioDTO(projeto)))
+                .map(projeto -> ResponseEntity.ok(new ProjetoPortfolioResponseDTO(projeto)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/publico")
-    public ResponseEntity<List<ProjetoPortfolioDTO>> listarProjetosPublicos() {
-        List<ProjetoPortfolioDTO> projetosPublicos = projetoPortfolioService.listarPublicados().stream()
-                .map(ProjetoPortfolioDTO::new)
+    public ResponseEntity<List<ProjetoPortfolioResponseDTO>> listarProjetosPublicos() {
+        List<ProjetoPortfolioResponseDTO> projetosPublicos = projetoPortfolioService.listarPublicados().stream()
+                .map(ProjetoPortfolioResponseDTO::new)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(projetosPublicos);
     }
 
     @PostMapping
-    public ResponseEntity<ProjetoPortfolioDTO> promoverOrdemDeServico(@RequestParam Long ordemDeServicoId) {
+    public ResponseEntity<ProjetoPortfolioResponseDTO> promoverOrdemDeServico(@RequestParam Long ordemDeServicoId) {
         try {
             ProjetoPortfolio novoProjeto = projetoPortfolioService.promoverParaPortfolio(ordemDeServicoId);
-            return ResponseEntity.ok(new ProjetoPortfolioDTO(novoProjeto));
+            return ResponseEntity.ok(new ProjetoPortfolioResponseDTO(novoProjeto));
         } catch (IllegalStateException | IllegalArgumentException e) {
             return ResponseEntity.badRequest().header("X-Error-Message", e.getMessage()).build();
         }
     }
 
     @PostMapping("/{id}/fotos")
-    public ResponseEntity<ProjetoPortfolioDTO> adicionarFoto(
+    public ResponseEntity<ProjetoPortfolioResponseDTO> adicionarFoto(
             @PathVariable Long id,
             @RequestParam("file") MultipartFile file,
-            @RequestParam("legenda") String legenda,
-            @RequestParam("ordemExibicao") Integer ordemExibicao) {
+            @RequestParam(value = "legenda", required = false, defaultValue = "") String legenda,
+            @RequestParam(value = "ordemExibicao", required = false, defaultValue = "0") Integer ordemExibicao) {
         try {
             ProjetoPortfolio projetoAtualizado = projetoPortfolioService.adicionarFoto(id, file, legenda, ordemExibicao);
-            return ResponseEntity.ok(new ProjetoPortfolioDTO(projetoAtualizado));
+            return ResponseEntity.ok(new ProjetoPortfolioResponseDTO(projetoAtualizado));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(500).header("X-Error-Message", e.getMessage()).build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjetoPortfolioDTO> atualizarProjeto(@PathVariable Long id, @RequestBody ProjetoPortfolio projeto) {
-        return projetoPortfolioService.atualizar(id, projeto)
-                .map(projetoAtualizado -> ResponseEntity.ok(new ProjetoPortfolioDTO(projetoAtualizado)))
+    public ResponseEntity<ProjetoPortfolioResponseDTO> atualizarProjeto(
+            @PathVariable Long id,
+            @Valid @RequestBody ProjetoPortfolioUpdateRequestDTO dto) {
+
+        return projetoPortfolioService.atualizar(id, dto)
+                .map(projetoAtualizado -> ResponseEntity.ok(new ProjetoPortfolioResponseDTO(projetoAtualizado)))
                 .orElse(ResponseEntity.notFound().build());
     }
 

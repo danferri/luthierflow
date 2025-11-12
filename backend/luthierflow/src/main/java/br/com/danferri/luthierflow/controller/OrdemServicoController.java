@@ -1,11 +1,10 @@
 package br.com.danferri.luthierflow.controller;
 
 import br.com.danferri.luthierflow.domain.OrdemDeServico;
-import br.com.danferri.luthierflow.dto.AdicionarPecaRequestDTO;
-import br.com.danferri.luthierflow.dto.OrdemServicoCreateRequestDTO;
-import br.com.danferri.luthierflow.dto.OrdemServicoResponseDTO;
-import br.com.danferri.luthierflow.dto.OrdemServicoUpdateRequestDTO;
+import br.com.danferri.luthierflow.domain.ProjetoPortfolio;
+import br.com.danferri.luthierflow.dto.*;
 import br.com.danferri.luthierflow.service.OrdemServicoService;
+import br.com.danferri.luthierflow.service.ProjetoPortfolioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,9 @@ public class OrdemServicoController {
 
     @Autowired
     private OrdemServicoService ordemServicoService;
+
+    @Autowired
+    private ProjetoPortfolioService projetoPortfolioService;
 
     @GetMapping
     public ResponseEntity<List<OrdemServicoResponseDTO>> listarTodasAsOrdens() {
@@ -65,6 +67,20 @@ public class OrdemServicoController {
             return ResponseEntity.notFound().build();
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/{id}/promover-portfolio")
+    public ResponseEntity<ProjetoPortfolioResponseDTO> promoverParaPortfolio(@PathVariable Long id) {
+        try {
+            ProjetoPortfolio novoProjeto = projetoPortfolioService.promoverParaPortfolio(id);
+            return ResponseEntity.ok(new ProjetoPortfolioResponseDTO(novoProjeto));
+
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).build();
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
