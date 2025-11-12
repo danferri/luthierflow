@@ -2,22 +2,43 @@
   <h2>Dashboard</h2>
   <p>Visão geral e imediata do status do seu ateliê.</p>
 
-  <div class="kpi-cards">
-    <div class="card">
-      <h3>Ordens em Andamento</h3>
-      <p class="kpi-value">02</p>
+  @if (stats) {
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <span class="icon">🔧</span>
+        <div class="text-content">
+          <span class="value">{{ stats.ordensEmAndamento }}</span>
+          <span class="label">Ordens em Andamento</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <span class="icon">📄</span>
+        <div class="text-content">
+          <span class="value">{{ stats.orcamentosParaAprovar }}</span>
+          <span class="label">Orçamentos para Aprovar</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <span class="icon">📦</span>
+        <div class="text-content">
+          <span class="value">{{ stats.itensComEstoqueBaixo }}</span>
+          <span class="label">Itens com Estoque Baixo</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <span class="icon">$</span>
+        <div class="text-content">
+          <span class="value">{{ stats.totalFaturadoNoMes | currency:'BRL' }}</span>
+          <span class="label">Total Faturado no Mês</span>
+        </div>
+      </div>
+
     </div>
-    <div class="card">
-      <h3>Orçamentos para Aprovar</h3>
-      <p class="kpi-value">03</p>
-    </div>
-    <div class="card">
-      <h3>Itens com Estoque Baixo</h3>
-      <p class="kpi-value">02</p>
-    </div>
-    <div class="card">
-      <h3>Total Faturado no Mês</h3>
-      <p class="kpi-value">R$ 1.250,00</p>
-    </div>
-  </div>
+  } @else {
+    <p>Carregando estatísticas...</p>
+  }
 </div>
