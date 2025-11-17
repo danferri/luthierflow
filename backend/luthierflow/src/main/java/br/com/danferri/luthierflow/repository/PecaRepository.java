@@ -8,4 +8,6 @@ import java.util.Optional;
 @Repository
 public interface PecaRepository extends JpaRepository<Peca, Long> {
     Optional<Peca> findByNomePecaAndFabricanteAndModelo(String nomePeca, String fabricante, String modelo);
+
+    long countByQtdEstoqueLessThan(int minEstoque);
 }

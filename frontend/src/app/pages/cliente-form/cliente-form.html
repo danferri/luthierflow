@@ -1,0 +1,120 @@
+<div class="form-container">
+  <h2>{{ isEditMode ? 'Editar Cliente' : 'Novo Cliente' }}</h2>
+  <p>{{ isEditMode ? 'Atualize os dados do cliente e gerencie seus instrumentos.' : 'Preencha os dados abaixo para cadastrar um novo cliente.' }}</p>
+
+  <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
+
+    <div class="card form-section">
+      <h3>Dados Pessoais</h3>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="nome">Nome *</label>
+          <input type="text" id="nome" formControlName="nome" placeholder="Nome completo do cliente">
+          <div *ngIf="clienteForm.controls['nome'].invalid && (clienteForm.controls['nome'].dirty || clienteForm.controls['nome'].touched)" class="error-message">
+            <small *ngIf="clienteForm.controls['nome'].errors?.['required']">Nome é obrigatório.</small>
+            <small *ngIf="clienteForm.controls['nome'].errors?.['minlength']">Nome deve ter pelo menos 3 caracteres.</small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="email">E-mail *</label>
+          <input type="email" id="email" formControlName="email" placeholder="email@exemplo.com">
+          <div *ngIf="clienteForm.controls['email'].invalid && (clienteForm.controls['email'].dirty || clienteForm.controls['email'].touched)" class="error-message">
+            <small *ngIf="clienteForm.controls['email'].errors?.['required']">E-mail é obrigatório.</small>
+            <small *ngIf="clienteForm.controls['email'].errors?.['email']">Formato de e-mail inválido.</small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="cpf">CPF *</label>
+          <input type="text" id="cpf" formControlName="cpf" placeholder="000.000.000-00" mask="000.000.000-00">
+          <div *ngIf="clienteForm.controls['cpf'].invalid && (clienteForm.controls['cpf'].dirty || clienteForm.controls['cpf'].touched)" class="error-message">
+            <small *ngIf="clienteForm.controls['cpf'].errors?.['required']">CPF é obrigatório.</small>
+            <small *ngIf="clienteForm.controls['cpf'].errors?.['minlength'] || clienteForm.controls['cpf'].errors?.['maxlength']">CPF deve ter 11 dígitos.</small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="telefone">Telefone *</label>
+          <input type="tel" id="telefone" formControlName="telefone" placeholder="(00) 00000-0000" mask="(00) 0000-0000||(00) 00000-0000">
+          <div *ngIf="clienteForm.controls['telefone'].invalid && (clienteForm.controls['telefone'].dirty || clienteForm.controls['telefone'].touched)" class="error-message">
+            <small *ngIf="clienteForm.controls['telefone'].errors?.['required']">Telefone é obrigatório.</small>
+          </div>
+        </div>
+
+      </div>
+    </div> <div class="card form-section">
+      <h3>Endereço (Opcional)</h3>
+      <div class="form-grid address-grid">
+        <div class="form-field">
+          <label for="cep">CEP</label>
+          <input type="text" id="cep" formControlName="cep" placeholder="00000-000">
+          </div>
+
+        <div class="form-field full-width">
+          <label for="rua">Rua</label>
+          <input type="text" id="rua" formControlName="rua">
+        </div>
+
+        <div class="form-field">
+          <label for="cidade">Cidade</label>
+          <input type="text" id="cidade" formControlName="cidade">
+        </div>
+
+        <div class="form-field">
+          <label for="estado">Estado</label>
+          <input type="text" id="estado" formControlName="estado" maxlength="2">
+        </div>
+      </div>
+    </div> <div *ngIf="isEditMode" class="card form-section">
+      <div class="section-header">
+        <h3>Instrumentos Cadastrados</h3>
+        <button type="button" class="btn-add-instrumento" (click)="abrirModalInstrumento()">+ Add Instrumento</button>
+      </div>
+
+      <table *ngIf="instrumentosDoCliente.length > 0; else semInstrumentos" class="data-table">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>N/S</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inst of instrumentosDoCliente">
+            <td>{{ inst.tipo }}</td>
+            <td>{{ inst.marca }}</td>
+            <td>{{ inst.modelo }}</td>
+            <td>{{ inst.numeroSerie || '-' }}</td>
+            <td>
+              <button type="button" class="btn-icon btn-edit" (click)="abrirModalInstrumento(inst.id)">✏️</button>
+              <button type="button" class="btn-icon btn-delete" (click)="excluirInstrumento(inst)">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #semInstrumentos>
+        <p class="empty-message-local">Nenhum instrumento cadastrado para este cliente.</p>
+      </ng-template>
+
+    </div> <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="clienteForm.invalid">
+        {{ isEditMode ? 'Salvar Alterações do Cliente' : 'Salvar Cliente' }}
+      </button>
+    </div>
+
+  </form>
+</div>
+
+
+<app-instrumento-form-modal
+  *ngIf="isInstrumentoModalVisible && clienteId"
+  [clienteId]="clienteId"
+  [instrumentoIdParaEditar]="instrumentoIdParaEditar"
+  (fechar)="aoFecharModal($event)">
+</app-instrumento-form-modal>

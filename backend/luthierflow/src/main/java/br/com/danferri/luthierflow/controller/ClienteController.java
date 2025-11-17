@@ -1,7 +1,10 @@
 package br.com.danferri.luthierflow.controller;
 
-import br.com.danferri.luthierflow.domain.Cliente;
+import br.com.danferri.luthierflow.dto.ClienteRequestDTO;
+import br.com.danferri.luthierflow.dto.ClienteResponseDTO;
+import br.com.danferri.luthierflow.dto.InstrumentoResponseDTO;
 import br.com.danferri.luthierflow.service.ClienteService;
+import br.com.danferri.luthierflow.service.InstrumentoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,30 +19,37 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private InstrumentoService instrumentoService;
+
     @GetMapping
-    public ResponseEntity<List<Cliente>> listarTodosOsClientes() {
-        List<Cliente> clientes = clienteService.listarTodosClientes();
+    public ResponseEntity<List<ClienteResponseDTO>> listarTodosOsClientes() {
+        List<ClienteResponseDTO> clientes = clienteService.listarTodosClientes();
         return ResponseEntity.ok(clientes);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
+    public ResponseEntity<ClienteResponseDTO> buscarClientePorId(@PathVariable Long id) {
         return clienteService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{clienteId}/instrumentos")
+    public ResponseEntity<List<InstrumentoResponseDTO>> listarInstrumentosPorCliente(@PathVariable Long clienteId) {
+        List<InstrumentoResponseDTO> instrumentos = instrumentoService.listarPorCliente(clienteId);
+        return ResponseEntity.ok(instrumentos);
+    }
+
     @PostMapping
-    @Valid
-    public ResponseEntity<Cliente> adicionarCliente(@RequestBody Cliente cliente) {
-        Cliente novoCliente = clienteService.salvar(cliente);
+    public ResponseEntity<ClienteResponseDTO> adicionarCliente(@RequestBody @Valid ClienteRequestDTO clienteDTO) {
+        ClienteResponseDTO novoCliente = clienteService.salvar(clienteDTO);
         return ResponseEntity.ok(novoCliente);
     }
 
     @PutMapping("/{id}")
-    @Valid
-    public ResponseEntity<Cliente> atualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
-        return clienteService.atualizar(id, cliente)
+    public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable Long id, @RequestBody @Valid ClienteRequestDTO clienteDTO) {
+        return clienteService.atualizar(id, clienteDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

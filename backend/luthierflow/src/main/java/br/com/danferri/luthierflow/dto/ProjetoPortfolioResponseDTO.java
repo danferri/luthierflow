@@ -8,23 +8,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class ProjetoPortfolioDTO {
+public class ProjetoPortfolioResponseDTO {
 
     private Long id;
     private String tituloPublico;
     private String descricaoPublica;
     private String statusPublicacao;
     private LocalDate dataPublicacao;
-    private OrdemServicoDTO ordemDeServico;
+    private OrdemServicoResponseDTO ordemDeServico;
     private List<FotoPortfolioDTO> fotos;
 
-    public ProjetoPortfolioDTO(ProjetoPortfolio projeto) {
+    public ProjetoPortfolioResponseDTO(ProjetoPortfolio projeto) {
         this.id = projeto.getId();
         this.tituloPublico = projeto.getTituloPublico();
         this.descricaoPublica = projeto.getDescricaoPublica();
         this.statusPublicacao = projeto.getStatusPublicacao();
         this.dataPublicacao = projeto.getDataPublicacao();
-        this.ordemDeServico = new OrdemServicoDTO(projeto.getOrdemDeServico());
+        this.ordemDeServico = new OrdemServicoResponseDTO(projeto.getOrdemDeServico());
         this.fotos = projeto.getFotos().stream()
                 .map(FotoPortfolioDTO::new)
                 .collect(Collectors.toList());

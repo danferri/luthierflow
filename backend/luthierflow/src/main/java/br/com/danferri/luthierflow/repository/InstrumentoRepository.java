@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface InstrumentoRepository extends JpaRepository<Instrumento, Long> {
     List<Instrumento> findByClienteId(Long clienteId);
-
+    List<Instrumento> findAllByClienteId(Long clienteId);
     Optional<Instrumento> findByNumeroSerieAndClienteId(String numeroDeSerie, Long clienteId);
 }

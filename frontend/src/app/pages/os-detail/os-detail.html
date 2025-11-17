@@ -1,0 +1,106 @@
+<div class="detail-container" *ngIf="os">
+  
+  <div class="detail-header">
+    <h2>Ordem de Serviço #{{ os.id }}</h2>
+    <p>
+      <strong>Cliente:</strong> {{ os.cliente.nome }} | 
+      <strong>Instrumento:</strong> {{ os.instrumento?.marca }} {{ os.instrumento?.modelo || 'N/A' }}
+    </p>
+  </div>
+
+  <div class="detail-grid">
+    
+    <div class="main-content">
+      
+      <div class="card">
+        <h3>Relato do Cliente</h3>
+        <p>{{ os.descricaoProblema }}</p>
+      </div>
+
+      <form [formGroup]="osUpdateForm" (ngSubmit)="onUpdateFormSubmit()">
+        <div class="card">
+          <h3>Diagnóstico do Serviço</h3>
+          <div class="form-field">
+            <label for="diagnosticoServico">Diagnóstico Técnico</label>
+            <textarea id="diagnosticoServico" formControlName="diagnosticoServico"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="valorMaoDeObra">Valor Mão de Obra (R$)</label>
+            <input type="number" id="valorMaoDeObra" formControlName="valorMaoDeObra">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="voltarParaLista()">Voltar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="osUpdateForm.invalid">Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="sidebar-content">
+
+      <div class="card">
+        <h3>Status</h3>
+        <div class="form-field">
+          <label for="status">Alterar Status</label>
+          <select id="status" [formControl]="statusControl">
+            <option value="ORCAMENTO">Orçamento</option>
+            <option value="EM_ANDAMENTO">Em Andamento</option>
+            <option value="AGUARDANDO_PECAS">Aguardando Peças</option>
+            <option value="FINALIZADO">Finalizado</option>
+            <option value="CANCELADO">Cancelado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Peças Utilizadas</h3>
+        <ul class="pecas-list" *ngIf="os.itens.length > 0; else semPecas">
+          <li *ngFor="let item of os.itens" class="peca-item">
+            <div class="info">
+              {{ item.nomePeca }} <span>(Qtd: {{ item.quantidadeUsada }})</span>
+            </div>
+            <div class="actions">
+              <button class="btn-icon-delete" (click)="onRemoverPeca(item.pecaId)">🗑️</button>
+            </div>
+          </li>
+        </ul>
+        <ng-template #semPecas><p>Nenhuma peça adicionada.</p></ng-template>
+        
+        <form [formGroup]="pecaAddForm" (ngSubmit)="onAdicionarPeca()" class="add-peca-form">
+          <div class="form-field">
+            <select formControlName="pecaId">
+              <option [ngValue]="null" disabled>[Selecione uma peça]</option>
+              <option *ngFor="let peca of pecasDisponiveis" [ngValue]="peca.id">
+                {{ peca.nomePeca }} (Est: {{ peca.qtdEstoque }})
+              </option>
+            </select>
+          </div>
+          <div class="form-field form-field-qty">
+            <input type="number" formControlName="quantidade" placeholder="Qtd.">
+          </div>
+          <button type="submit" class="btn-add-peca" [disabled]="pecaAddForm.invalid">+</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Resumo</h3>
+        <div class="resumo-item">
+          <span class="label">Subtotal Peças:</span>
+          <span class="value">{{ subtotalPecas | currency:'BRL' }}</span>
+        </div>
+        <div class="resumo-item">
+          <span class="label">Mão de Obra:</span>
+          <span class="value">{{ os.valorMaoDeObra | currency:'BRL' }}</span>
+        </div>
+        <hr>
+        <div class="resumo-item">
+          <strong class="label">Total:</strong>
+          <strong class="value">{{ totalServico | currency:'BRL' }}</strong>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

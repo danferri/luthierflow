@@ -1,0 +1,63 @@
+<div class="modal-backdrop" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    
+    <h3>Adicionar Nova O.S.</h3>
+    
+    <form [formGroup]="osForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid-single">
+
+        <div class="form-field">
+          <label for="clienteId">Cliente *</label>
+          <select id="clienteId" formControlName="clienteId" (change)="onClienteChange()">
+            <option [ngValue]="null" disabled>[Selecione um cliente]</option>
+            <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">
+              {{ cliente.nome }}
+            </option>
+          </select>
+          <div *ngIf="osForm.controls['clienteId'].invalid && osForm.controls['clienteId'].touched" class="error-message">
+            <small>Obrigatório.</small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="instrumentoId">Instrumento (Opcional)</label>
+          <select id="instrumentoId" formControlName="instrumentoId" [disabled]="!osForm.controls['clienteId'].value">
+            <option [ngValue]="null">[Nenhum / Serviço Geral]</option>
+            <option *ngFor="let instrumento of instrumentosDoCliente" [ngValue]="instrumento.id">
+              {{ instrumento.marca }} {{ instrumento.modelo }} ({{ instrumento.tipo }})
+            </option>
+          </select>
+        </div>
+        
+        <div class="form-field">
+          <label for="tipoServico">Tipo de Serviço *</label>
+          <select id="tipoServico" formControlName="tipoServico">
+             <option [ngValue]="null" disabled>[Selecione o tipo]</option>
+             <option value="Reparo">Reparo</option>
+             <option value="Regulagem">Regulagem</option>
+             <option value="Construção">Construção</option>
+             <option value="Outro">Outro</option>
+          </select>
+          <div *ngIf="osForm.controls['tipoServico'].invalid && osForm.controls['tipoServico'].touched" class="error-message">
+            <small>Obrigatório.</small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="descricaoProblema">Descrição do Problema *</label>
+          <textarea id="descricaoProblema" formControlName="descricaoProblema" placeholder="Relato do cliente..."></textarea>
+          <div *ngIf="osForm.controls['descricaoProblema'].invalid && osForm.controls['descricaoProblema'].touched" class="error-message">
+            <small>Obrigatório.</small>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="osForm.invalid">Criar O.S.</button>
+      </div>
+    </form>
+
+  </div>
+</div>

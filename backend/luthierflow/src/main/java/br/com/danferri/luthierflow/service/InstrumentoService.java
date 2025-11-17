@@ -2,77 +2,102 @@ package br.com.danferri.luthierflow.service;
 
 import br.com.danferri.luthierflow.domain.Cliente;
 import br.com.danferri.luthierflow.domain.Instrumento;
+import br.com.danferri.luthierflow.dto.InstrumentoRequestDTO;
+import br.com.danferri.luthierflow.dto.InstrumentoResponseDTO;
 import br.com.danferri.luthierflow.repository.ClienteRepository;
 import br.com.danferri.luthierflow.repository.InstrumentoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class InstrumentoService {
+
     @Autowired
     private InstrumentoRepository instrumentoRepository;
 
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public List<Instrumento> listarPorCliente(Long clienteId) {
-        if (!clienteRepository.existsById(clienteId) ) {
-            return Collections.emptyList();
-        }
-        return instrumentoRepository.findByClienteId(clienteId);
+    @Transactional(readOnly = true)
+    public List<InstrumentoResponseDTO> listarTodos() {
+        return instrumentoRepository.findAll()
+                .stream()
+                .map(InstrumentoResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Instrumento> salvar(Long clientId, Instrumento instrumento) {
+    @Transactional(readOnly = true)
+    public List<InstrumentoResponseDTO> listarPorCliente(Long clienteId) {
+        return instrumentoRepository.findAllByClienteId(clienteId)
+                .stream()
+                .map(InstrumentoResponseDTO::new)
+                .collect(Collectors.toList());
+    }
 
-        Optional<Instrumento> instrumentoExistente = instrumentoRepository.findByNumeroSerieAndClienteId(instrumento.getNumeroSerie(), clientId);
-        if (instrumentoExistente.isPresent()) {
-            throw new IllegalArgumentException("Instrumento com o mesmo número de série já cadastrado para este cliente.");
-        }
 
-        Optional<Cliente> clienteOpt = clienteRepository.findById(clientId);
-        if (clienteOpt.isEmpty()) {
-            return Optional.empty();
-        }
+    @Transactional(readOnly = true)
+    public Optional<InstrumentoResponseDTO> buscarPorId(Long id) {
+        return instrumentoRepository.findById(id)
+                .map(InstrumentoResponseDTO::new);
+    }
 
-        Cliente cliente = clienteOpt.get();
+    @Transactional
+    public InstrumentoResponseDTO salvar(InstrumentoRequestDTO dto) {
+
+        Cliente cliente = clienteRepository.findById(dto.getIdCliente())
+                .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + dto.getIdCliente() + " não encontrado."));
+
+        Instrumento instrumento = new Instrumento();
+        instrumento.setTipo(dto.getTipo());
+        instrumento.setMarca(dto.getMarca());
+        instrumento.setModelo(dto.getModelo());
+        instrumento.setNumeroSerie(dto.getNumeroSerie());
         instrumento.setCliente(cliente);
-        return  Optional.of(instrumentoRepository.save(instrumento));
+
+        Instrumento instrumentoSalvo = instrumentoRepository.save(instrumento);
+        return new InstrumentoResponseDTO(instrumentoSalvo);
     }
 
-    public Optional<Instrumento> buscarPorId(Long instrumentoId) {
-        return instrumentoRepository.findById(instrumentoId);
-    }
-
-    public Optional<Instrumento> atualizar(Long clienteId, Long instrumentoId, Instrumento instrumentoAtualizado) {
-        return instrumentoRepository.findById(instrumentoId)
-                .filter(instrumento -> instrumento.getCliente().getId().equals(clienteId))
+    @Transactional
+    public Optional<InstrumentoResponseDTO> atualizar(Long id, InstrumentoRequestDTO dto) {
+        return instrumentoRepository.findById(id)
                 .map(instrumentoExistente -> {
-                    if (instrumentoAtualizado.getMarca() != null) {
-                        instrumentoExistente.setMarca(instrumentoAtualizado.getMarca());
+                    if (dto.getTipo() != null) {
+                        instrumentoExistente.setTipo(dto.getTipo());
                     }
-                    if (instrumentoAtualizado.getModelo() != null) {
-                        instrumentoExistente.setModelo(instrumentoAtualizado.getModelo());
+                    if (dto.getMarca() != null) {
+                        instrumentoExistente.setMarca(dto.getMarca());
                     }
-                    if (instrumentoAtualizado.getTipo() != null) {
-                        instrumentoExistente.setTipo(instrumentoAtualizado.getTipo());
+                    if (dto.getModelo() != null) {
+                        instrumentoExistente.setModelo(dto.getModelo());
                     }
-                    if (instrumentoAtualizado.getNumeroSerie() != null) {
-                        instrumentoExistente.setNumeroSerie(instrumentoAtualizado.getNumeroSerie());
+                    if (dto.getNumeroSerie() != null) {
+                        instrumentoExistente.setNumeroSerie(dto.getNumeroSerie());
                     }
-                    return instrumentoRepository.save(instrumentoExistente);
+
+                    if (dto.getIdCliente() != null) {
+                        Cliente novoCliente = clienteRepository.findById(dto.getIdCliente())
+                                .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + dto.getIdCliente() + " não encontrado."));
+                        instrumentoExistente.setCliente(novoCliente);
+                    }
+
+                    Instrumento instrumentoAtualizado = instrumentoRepository.save(instrumentoExistente);
+                    return new InstrumentoResponseDTO(instrumentoAtualizado);
                 });
     }
 
-    public boolean deletar(Long clienteId, Long instrumentoId) {
-        Optional<Instrumento> instrumentoOpt = instrumentoRepository.findById(instrumentoId);
-        if (instrumentoOpt.isPresent() && instrumentoOpt.get().getCliente().getId().equals(clienteId)) {
-            instrumentoRepository.deleteById(instrumentoId);
-            return true;
+    @Transactional
+    public void deletar(Long id) {
+        if (instrumentoRepository.existsById(id)) {
+            instrumentoRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("Instrumento com ID " + id + " não encontrado ou já arquivado.");
         }
-        return false;
     }
 }

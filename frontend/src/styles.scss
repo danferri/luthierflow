@@ -1,0 +1,38 @@
+@use '@angular/material' as mat;
+@import '@aws-amplify/ui/styles.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  background-color: #f4f7fa; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: var(--mat-sys-on-surface);
+  color-scheme: light;
+}
+
+app-root {
+  height: 100%;
+  display: block;
+}

@@ -1,0 +1,50 @@
+<div class="modal-backdrop" (click)="onCancel()">
+  
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    
+    <h3>{{ (instrumentoIdParaEditar ? 'Editar' : 'Adicionar Novo') + ' Instrumento' }}</h3>
+    
+    <form [formGroup]="instrumentoForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+
+        <div class="form-field">
+          <label for="tipo">Tipo *</label>
+          <input type="text" id="tipo" formControlName="tipo" placeholder="Ex: Guitarra">
+          <div *ngIf="instrumentoForm.controls['tipo'].invalid && (instrumentoForm.controls['tipo'].dirty || instrumentoForm.controls['tipo'].touched)" class="error-message">
+            <small *ngIf="instrumentoForm.controls['tipo'].errors?.['required']">Obrigatório.</small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="marca">Marca *</label>
+          <input type="text" id="marca" formControlName="marca" placeholder="Ex: Fender">
+          <div *ngIf="instrumentoForm.controls['marca'].invalid && (instrumentoForm.controls['marca'].dirty || instrumentoForm.controls['marca'].touched)" class="error-message">
+            <small *ngIf="instrumentoForm.controls['marca'].errors?.['required']">Obrigatório.</small>
+          </div>
+        </div>
+        
+        <div class="form-field">
+          <label for="modelo">Modelo *</label>
+          <input type="text" id="modelo" formControlName="modelo" placeholder="Ex: Stratocaster">
+          <div *ngIf="instrumentoForm.controls['modelo'].invalid && (instrumentoForm.controls['modelo'].dirty || instrumentoForm.controls['modelo'].touched)" class="error-message">
+            <small *ngIf="instrumentoForm.controls['modelo'].errors?.['required']">Obrigatório.</small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="numeroSerie">Número de Série (Opcional)</label>
+          <input type="text" id="numeroSerie" formControlName="numeroSerie" placeholder="N/S">
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="instrumentoForm.invalid">
+          {{ instrumentoIdParaEditar ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>

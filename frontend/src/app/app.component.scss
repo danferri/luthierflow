@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  height: 100vh;
+  width: 100vw;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+:host ::ng-deep router-outlet + * {
+  flex-grow: 1;
+}
+
+.app-footer {
+  flex-shrink: 0;
+  padding: 15px 30px;
+  background-color: #ffffff;
+  border-top: 1px solid #eef2f6;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #6c757d;
+}

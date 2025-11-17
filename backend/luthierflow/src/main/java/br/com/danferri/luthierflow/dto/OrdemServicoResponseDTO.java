@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
-public class OrdemServicoDTO {
+public class OrdemServicoResponseDTO {
 
     private Long id;
     private String tipoServico;
@@ -20,11 +20,11 @@ public class OrdemServicoDTO {
     private String descricaoProblema;
     private String diagnosticoServico;
     private BigDecimal valorMaoDeObra;
-    private ClienteDTO cliente;
-    private InstrumentoDTO instrumento;
+    private ClienteResponseDTO cliente;
+    private InstrumentoResponseDTO instrumento;
     private Set<ItemServicoDTO> itens;
 
-    public OrdemServicoDTO(OrdemDeServico os) {
+    public OrdemServicoResponseDTO(OrdemDeServico os) {
         this.id = os.getId();
         this.tipoServico = os.getTipoServico();
         this.dataEntrada = os.getDataEntrada();
@@ -33,9 +33,9 @@ public class OrdemServicoDTO {
         this.descricaoProblema = os.getDescricaoProblema();
         this.diagnosticoServico = os.getDiagnosticoServico();
         this.valorMaoDeObra = os.getValorMaoDeObra();
-        this.cliente = new ClienteDTO(os.getCliente());
+        this.cliente = new ClienteResponseDTO(os.getCliente());
         if (os.getInstrumento() != null) {
-            this.instrumento = new InstrumentoDTO(os.getInstrumento());
+            this.instrumento = new InstrumentoResponseDTO(os.getInstrumento());
         }
         this.itens = os.getItens().stream()
                 .map(ItemServicoDTO::new)

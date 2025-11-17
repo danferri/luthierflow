@@ -38,7 +38,6 @@ public class ProjetoPortfolio {
     )
     private List<FotoPortfolio> fotos = new ArrayList<>();
 
-    // Método auxiliar para facilitar a adição de fotos
     public void adicionarFoto(FotoPortfolio foto) {
         this.fotos.add(foto);
         foto.setProjetoPortfolio(this);
