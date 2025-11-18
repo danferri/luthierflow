@@ -117,4 +117,21 @@ public class ProjetoPortfolioService {
         }
         projetoPortfolioRepository.deleteById(id);
     }
+
+    @Transactional
+    public void removerFoto(Long projetoId, Long fotoId) {
+        ProjetoPortfolio projeto = projetoPortfolioRepository.findById(projetoId)
+                .orElseThrow(() -> new EntityNotFoundException("Projeto não encontrado."));
+
+        FotoPortfolio fotoParaRemover = projeto.getFotos().stream()
+                .filter(f -> f.getId().equals(fotoId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Foto não encontrada neste projeto."));
+
+        fileStorageService.deleteFile(fotoParaRemover.getUrlImagem());
+
+        projeto.getFotos().remove(fotoParaRemover);
+
+        projetoPortfolioRepository.save(projeto);
+    }
 }

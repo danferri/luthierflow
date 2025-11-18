@@ -56,4 +56,13 @@ public class FileStorageService {
             throw new RuntimeException("Não foi possível salvar o arquivo " + originalFileName, ex);
         }
     }
+
+    public void deleteFile(String fileName) {
+        try {
+            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            Files.deleteIfExists(filePath);
+        } catch (IOException ex) {
+            throw new RuntimeException("Não foi possível deletar o arquivo " + fileName, ex);
+        }
+    }
 }

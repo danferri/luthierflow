@@ -4,6 +4,7 @@ import br.com.danferri.luthierflow.domain.ProjetoPortfolio;
 import br.com.danferri.luthierflow.dto.ProjetoPortfolioResponseDTO;
 import br.com.danferri.luthierflow.dto.ProjetoPortfolioUpdateRequestDTO;
 import br.com.danferri.luthierflow.service.ProjetoPortfolioService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -84,6 +85,18 @@ public class ProjetoPortfolioController {
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}/fotos/{fotoId}")
+    public ResponseEntity<Void> removerFoto(@PathVariable Long id, @PathVariable Long fotoId) {
+        try {
+            projetoPortfolioService.removerFoto(id, fotoId);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }

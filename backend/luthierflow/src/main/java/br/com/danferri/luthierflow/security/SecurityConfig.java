@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/portfolio/publico").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
                         .anyRequest()
                         .authenticated()
                 )
