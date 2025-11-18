@@ -1,0 +1,40 @@
+<div class="list-container">
+  <div class="list-header">
+    <h2>Gestão de Portfólio</h2>
+  </div>
+
+  @if (projetos.length > 0) {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título do Projeto</th>
+          <th>O.S. Origem</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of projetos; track p.id) {
+          <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.tituloPublico }}</td>
+            <td>#{{ p.ordemDeServico.id }} - {{ p.ordemDeServico.instrumento?.marca }}</td>
+            <td>
+              <span class="badge" 
+                    [ngClass]="p.statusPublicacao === 'PUBLICADO' ? 'badge-publicado' : 'badge-rascunho'">
+                {{ p.statusPublicacao }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-icon btn-edit" [routerLink]="['/portfolio/editar', p.id]">✏️</button>
+              <button class="btn-icon btn-delete" (click)="excluirProjeto(p)">🗑️</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p class="empty-message">Nenhum projeto no portfólio. Promova uma O.S. finalizada para começar.</p>
+  }
+</div>

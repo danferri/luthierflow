@@ -57,6 +57,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/os-detail/os-detail').then(m => m.OsDetailComponent)
       },
       {
+        path: 'portfolio',
+        loadComponent: () => import('./pages/portfolio-admin-list/portfolio-admin-list').then(m => m.PortfolioAdminListComponent)
+      },
+      {
+        path: 'portfolio/editar/:id',
+        loadComponent: () => import('./pages/portfolio-form/portfolio-form').then(m => m.PortfolioFormComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

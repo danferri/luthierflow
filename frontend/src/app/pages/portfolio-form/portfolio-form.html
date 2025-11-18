@@ -1,0 +1,65 @@
+<div class="form-container">
+
+    @if (projeto) {
+    <h2>Editar Projeto de Portfólio</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div class="card">
+            <h3>Conteúdo Principal</h3>
+
+            <div class="form-field">
+                <label>Título Público</label>
+                <input type="text" formControlName="tituloPublico">
+            </div>
+
+            <div class="form-field">
+                <label>Descrição Completa</label>
+                <textarea formControlName="descricaoPublica"></textarea>
+            </div>
+
+            <div class="form-field">
+                <label>Status de Publicação</label>
+                <select formControlName="statusPublicacao">
+                    <option value="RASCUNHO">Rascunho (Invisível)</option>
+                    <option value="PUBLICADO">Publicado (Visível na Vitrine)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Galeria de Fotos</h3>
+
+            <div class="photos-grid">
+                @for (foto of projeto.fotos; track foto.id) {
+                <div class="photo-card">
+                    <img [src]="foto.fullUrl" alt="Foto do projeto">
+                    <button type="button" class="btn-delete-photo" (click)="onRemoverFoto(foto.id)">× </button>
+                    <div class="caption">{{ foto.legenda || 'Sem legenda' }}</div>
+                </div>
+                }
+            </div>
+
+            <div class="upload-area">
+                <h4>Adicionar Nova Foto</h4>
+
+                <div class="form-field">
+                    <input type="text" placeholder="Legenda da foto (opcional)" #legendaInput>
+                </div>
+
+                <label class="btn-upload">
+                    Escolher Arquivo e Enviar
+                    <input type="file" (change)="onFileSelected($event, legendaInput.value); legendaInput.value=''">
+                </label>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary" routerLink="/portfolio">Voltar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Salvar Alterações</button>
+        </div>
+
+    </form>
+    }
+
+</div>
