@@ -1,0 +1,80 @@
+// Variáveis de cor do LuthierFlow
+$primary-blue: #3f51b5;
+$bg-light: #f8f9fa;
+$text-dark: #333;
+
+.public-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; // Garante que ocupa a tela toda
+  background-color: $bg-light;
+  font-family: 'Roboto', sans-serif;
+}
+
+.public-header {
+  background-color: #ffffff;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%; // Responsivo: usa % em vez de px fixo
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05); // Sombra suave
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $primary-blue;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+
+  nav {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    a {
+      text-decoration: none;
+      color: #666;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+
+      &:hover { color: $primary-blue; }
+
+      // Botão de destaque (Login/Admin)
+      &.btn-login {
+        background-color: $primary-blue;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 20px; // Arredondado moderno
+        box-shadow: 0 4px 6px rgba(63, 81, 181, 0.2);
+        transition: transform 0.2s, box-shadow 0.2s;
+
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 6px 12px rgba(63, 81, 181, 0.3);
+        }
+      }
+    }
+  }
+}
+
+.public-content {
+  flex: 1; // Empurra o footer para baixo
+  // O conteúdo interno definirá seus próprios paddings
+}
+
+.public-footer {
+  background-color: #ffffff;
+  border-top: 1px solid #eee;
+  padding: 30px 5%;
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+  
+  p { margin: 0; }
+}

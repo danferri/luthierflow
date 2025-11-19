@@ -1,0 +1,40 @@
+@if (projeto) {
+  <div class="detail-container">
+    
+    <a routerLink="/" class="back-btn">← Voltar para a Galeria</a>
+
+    <header class="project-header">
+      <h1>{{ projeto.tituloPublico }}</h1>
+      <div class="meta-info">
+        Publicado em {{ projeto.dataPublicacao | date:'longDate' }}
+        @if (projeto.statusPublicacao === 'RASCUNHO') {
+          <span class="badge">RASCUNHO (Pré-visualização)</span>
+        }
+      </div>
+    </header>
+
+    <article class="project-content">
+      {{ projeto.descricaoPublica }}
+    </article>
+
+    <section class="gallery-section">
+      <h3>Galeria de Fotos</h3>
+      
+      <div class="gallery-grid">
+        @for (foto of projeto.fotos; track foto.id) {
+          <div class="gallery-item">
+            <img [src]="foto.fullUrl" [alt]="foto.legenda">
+            @if (foto.legenda) {
+              <div class="caption">{{ foto.legenda }}</div>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+  </div>
+} @else {
+  <div class="detail-container">
+    <p>Carregando projeto...</p>
+  </div>
+}

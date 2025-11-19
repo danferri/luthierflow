@@ -17,17 +17,31 @@ const authGuard: CanActivateFn = async () => {
 };
 
 export const routes: Routes = [  
+  
+  {
+    path: '', // Raiz do site
+    loadComponent: () => import('./layout/public/public').then(m => m.PublicComponent),
+    children: [
+      { 
+        path: '', // Home da Vitrine
+        loadComponent: () => import('./pages/portfolio-public-list/portfolio-public-list').then(m => m.PortfolioPublicListComponent)
+      },
+      {
+        path: 'projeto/:id', // Detalhes do Projeto
+        loadComponent: () => import('./pages/portfolio-public-detail/portfolio-public-detail').then(m => m.PortfolioPublicDetailComponent)
+      }
+    ]
+  },  
   {
     path: 'login',
     component: LoginComponent
   },
-  
   {
     path: '',
     loadComponent: () =>
       import('./layout/main/main').then((m: any) => m.MainLayoutComponent ?? m.MainComponent ?? m.MainLayout ?? m.default),
-    canActivate: [authGuard],
-    children: [      
+      canActivate: [authGuard],
+      children: [      
       {
         path: 'dashboard',
         loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.DashboardComponent)

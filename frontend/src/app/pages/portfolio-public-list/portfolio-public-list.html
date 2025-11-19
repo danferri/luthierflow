@@ -1,0 +1,41 @@
+<div class="hero">
+  <h1>Obras de Arte & Restauração</h1>
+  <p>Explore nossa coleção de instrumentos construídos e restaurados com paixão e precisão.</p>
+</div>
+
+<div class="container">
+  
+  @if (projetos.length > 0) {
+    <div class="projects-grid">
+      
+      @for (projeto of projetos; track projeto.id) {
+        <a [routerLink]="['/projeto', projeto.id]" class="project-card">
+          
+          <div class="card-image">
+            @if (projeto.fotos.length > 0) {
+              <img [src]="projeto.fotos[0].fullUrl" [alt]="projeto.tituloPublico">
+            } @else {
+              <div class="placeholder">Imagem Indisponível</div>
+            }
+          </div>
+
+          <div class="card-content">
+            <h3>{{ projeto.tituloPublico }}</h3>
+            
+            <div class="meta">
+              <span class="date">{{ projeto.dataPublicacao | date:'dd MMM yyyy' }}</span>
+              <span class="view-more">Ver Detalhes →</span>
+            </div>
+          </div>
+
+        </a>
+      }
+
+    </div>
+  } @else {
+    <div class="empty-state">
+      <p>Nenhum projeto publicado no momento. Volte em breve!</p>
+    </div>
+  }
+
+</div>
