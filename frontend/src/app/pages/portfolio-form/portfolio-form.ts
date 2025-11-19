@@ -87,7 +87,7 @@ export class PortfolioFormComponent implements OnInit {
     if (confirm('Tem certeza que deseja apagar esta foto?')) {
       this.portfolioService.removerFoto(this.id, fotoId).subscribe({
         next: () => {
-          // Remove a foto da lista localmente para atualizar a tela sem recarregar
+          
           if (this.projeto) {
             this.projeto.fotos = this.projeto.fotos.filter(f => f.id !== fotoId);
           }

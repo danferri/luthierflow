@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common'; // Importa o DatePipe
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PortfolioService, ProjetoPortfolio } from '../../services/portfolio.service';
 
 @Component({
   selector: 'app-portfolio-public-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, DatePipe], // Adiciona DatePipe aos imports
+  imports: [CommonModule, RouterLink, DatePipe],
   templateUrl: './portfolio-public-list.html',
   styleUrls: ['./portfolio-public-list.scss']
 })
@@ -16,8 +16,7 @@ export class PortfolioPublicListComponent implements OnInit {
 
   constructor(private portfolioService: PortfolioService) {}
 
-  ngOnInit(): void {
-    // Usa o método listarPublicados que adicionamos no serviço otimizado
+  ngOnInit(): void {    
     this.portfolioService.listarPublicados().subscribe({
       next: (dados) => this.projetos = dados,
       error: (err) => console.error('Erro ao carregar vitrine:', err)

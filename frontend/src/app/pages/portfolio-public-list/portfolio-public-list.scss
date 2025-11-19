@@ -1,6 +1,5 @@
 $primary-blue: #3f51b5;
 
-// Hero Section: O banner de boas-vindas
 .hero {
   background: linear-gradient(135deg, $primary-blue 0%, #5c6bc0 100%);
   color: white;
@@ -10,7 +9,7 @@ $primary-blue: #3f51b5;
 
   h1 {
     font-size: 3rem;
-    font-weight: 300; // Fonte fina e elegante
+    font-weight: 300;
     margin-bottom: 15px;
     letter-spacing: 1px;
   }
@@ -26,34 +25,30 @@ $primary-blue: #3f51b5;
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px 60px; // Espaço lateral e inferior
+  padding: 0 20px 60px;
 }
 
-// A Grade de Projetos Responsiva
 .projects-grid {
-  display: grid;
-  // Mágica do CSS Grid: Cria colunas de no mínimo 320px que preenchem o espaço
+  display: grid;  
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 30px;
 }
 
-// O Card do Projeto (Design Rebuscado)
 .project-card {
   background: white;
   border-radius: 12px;
-  overflow: hidden; // Garante que a imagem não saia das bordas arredondadas
-  text-decoration: none; // Remove sublinhado do link
+  overflow: hidden;
+  text-decoration: none;
   color: inherit;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); // Sombra suave e difusa
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   border: 1px solid transparent;
 
   &:hover {
-    transform: translateY(-8px); // "Levanta" o card
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12); // Aumenta a sombra
-    border-color: rgba($primary-blue, 0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    border-color: rgba($primary-blue, 0.1);    
     
-    // Efeito de zoom na imagem
     .card-image img {
       transform: scale(1.05);
     }
@@ -68,8 +63,8 @@ $primary-blue: #3f51b5;
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover; // Corta a imagem para preencher o espaço
-      transition: transform 0.5s ease; // Animação suave do zoom
+      object-fit: cover;
+      transition: transform 0.5s ease;
     }
 
     .placeholder {
@@ -119,7 +114,6 @@ $primary-blue: #3f51b5;
   }
 }
 
-// Mensagem de vazio
 .empty-state {
   text-align: center;
   padding: 50px;
@@ -130,8 +124,7 @@ $primary-blue: #3f51b5;
   box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
-// Responsividade para telas muito pequenas
 @media (max-width: 480px) {
   .hero { padding: 60px 20px; h1 { font-size: 2rem; } }
-  .projects-grid { grid-template-columns: 1fr; } // 1 coluna no celular
+  .projects-grid { grid-template-columns: 1fr; }
 }
