@@ -22,10 +22,10 @@ export class PortfolioPublicDetailComponent implements OnInit {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
-      this.portfolioService.buscarPorId(id).subscribe({
+      this.portfolioService.buscarPublicoPorId(id).subscribe({
         next: (dados) => this.projeto = dados,
         error: () => alert('Projeto não encontrado ou indisponível.')
-      });
+      });  
     }
   }
 }
