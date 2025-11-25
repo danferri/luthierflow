@@ -70,6 +70,12 @@ export class PortfolioService {
       );
   }
 
+  buscarPublicoPorId(id: number): Observable<ProjetoPortfolio> {
+    return this.http.get<ProjetoPortfolio>(`${this.apiUrl}/publico/${id}`).pipe(
+      map(p => this.mapProjeto(p))
+    );
+  }
+
   atualizar(id: number, dados: ProjetoPortfolioUpdate): Observable<ProjetoPortfolio> {
     return this.http.put<ProjetoPortfolio>(`${this.apiUrl}/${id}`, dados)
       .pipe(

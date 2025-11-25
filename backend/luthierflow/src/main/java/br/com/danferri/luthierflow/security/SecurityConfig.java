@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/portfolio/publico").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/portfolio/publico/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
                         .anyRequest()
                         .authenticated()

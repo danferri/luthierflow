@@ -111,6 +111,11 @@ public class ProjetoPortfolioService {
         return projetoPortfolioRepository.findByStatusPublicacao("PUBLICADO");
     }
 
+    public ProjetoPortfolio buscarPublicoPorId(Long id) {
+        return projetoPortfolioRepository.findByIdAndStatusPublicacao(id, "PUBLICADO")
+                .orElseThrow(() -> new EntityNotFoundException("Projeto não encontrado ou não publicado."));
+    }
+
     public void deletar(Long id) {
         if (!projetoPortfolioRepository.existsById(id)) {
             throw new IllegalArgumentException("Projeto de Portfólio não encontrado.");

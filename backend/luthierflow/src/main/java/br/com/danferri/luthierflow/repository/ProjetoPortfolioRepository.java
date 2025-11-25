@@ -12,4 +12,5 @@ public interface ProjetoPortfolioRepository extends JpaRepository<ProjetoPortfol
 
     Optional<ProjetoPortfolio> findByOrdemDeServicoId(Long ordemDeServicoId);
     List<ProjetoPortfolio> findByStatusPublicacao(String status);
+    Optional<ProjetoPortfolio> findByIdAndStatusPublicacao(Long id, String statusPublicacao);
 }

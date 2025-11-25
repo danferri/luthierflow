@@ -44,6 +44,16 @@ public class ProjetoPortfolioController {
         return ResponseEntity.ok(projetosPublicos);
     }
 
+    @GetMapping("/publico/{id}")
+    public ResponseEntity<ProjetoPortfolioResponseDTO> buscarProjetoPublicoPorId(@PathVariable Long id) {
+        try {
+            ProjetoPortfolio projeto = projetoPortfolioService.buscarPublicoPorId(id);
+            return ResponseEntity.ok(new ProjetoPortfolioResponseDTO(projeto));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<ProjetoPortfolioResponseDTO> promoverOrdemDeServico(@RequestParam Long ordemDeServicoId) {
         try {
