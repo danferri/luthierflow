@@ -36,3 +36,27 @@ app-root {
   height: 100%;
   display: block;
 }
+
+/* Sobrescrevendo as variáveis do Amplify UI */
+:root {
+  /* Cor primária do LuthierFlow (Azul) */
+  --amplify-colors-primary-10: #e8eaf6;
+  --amplify-colors-primary-20: #c5cae9;
+  --amplify-colors-primary-40: #7986cb;
+  --amplify-colors-primary-60: #3f51b5; /* Cor principal */
+  --amplify-colors-primary-80: #303f9f; /* Cor hover */
+  --amplify-colors-primary-90: #283593;
+  --amplify-colors-primary-100: #1a237e;
+
+  /* Fontes */
+  --amplify-fonts-default-variable: 'Roboto', sans-serif;
+
+  /* Outros ajustes (ex: bordas arredondadas) */
+  --amplify-components-button-border-radius: 6px;
+  --amplify-components-field-border-radius: 6px;
+}
+
+/* Estilizando o botão de login especificamente se necessário */
+.amplify-button--primary {
+  background-color: #3f51b5 !important; /* Sua cor azul */
+}

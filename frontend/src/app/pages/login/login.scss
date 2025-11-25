@@ -1,0 +1,17 @@
+/* Esconde o link de "Esqueci a senha" especificamente na tela de Login */
+[data-amplify-router-content="signIn"] .amplify-button--link {
+  display: none !important;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center; /* Centraliza Horizontalmente (Esquerda/Direita) */
+  align-items: center;     /* Centraliza Verticalmente (Topo/Baixo) */
+  min-height: 100vh;       /* Força o container a ter a altura total da tela */
+  background-color: #f4f7fa; /* Garante que o fundo seja o cinza claro do sistema */
+  
+  /* Opcional: Adiciona um pouco de padding para telas muito pequenas */
+  padding: 20px;
+}
+
+/* (Seus outros estilos customizados do Amplify, se houver, ficam aqui abaixo) */
