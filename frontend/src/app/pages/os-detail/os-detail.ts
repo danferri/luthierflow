@@ -165,6 +165,26 @@ export class OsDetailComponent implements OnInit {
       });
     }
   }
+
+  promoverParaPortfolio(): void {
+    if (!this.os) return;
+
+    if (confirm('Deseja criar um rascunho de portfólio a partir desta O.S.?')) {
+      this.osService.promoverParaPortfolio(this.os.id).subscribe({
+        next: (novoProjeto) => {
+          alert('Projeto criado com sucesso! Redirecionando para edição...');          
+          this.router.navigate(['/portfolio/editar', novoProjeto.id]);
+        },
+        error: (err) => {
+          if (err.status === 409) {
+            alert('Esta O.S. já foi adicionada ao portfólio anteriormente.');
+          } else {
+            alert('Erro ao promover para portfólio.');
+          }
+        }
+      });
+    }
+  }
   
   voltarParaLista(): void {
     this.router.navigate(['/ordens-servico']);

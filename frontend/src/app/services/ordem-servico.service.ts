@@ -83,4 +83,8 @@ export class OrdemServicoService {
   removerPeca(osId: number, pecaId: number): Observable<OrdemServico> {
     return this.http.delete<OrdemServico>(`${this.apiUrl}/${osId}/pecas/${pecaId}`);
   }
+
+  promoverParaPortfolio(id: number): Observable<any> {    
+    return this.http.post<any>(`${this.apiUrl}/${id}/promover-portfolio`, {});
+  }
 }
